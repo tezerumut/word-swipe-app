@@ -1,55 +1,42 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Oxford 3000/5000 Bazlı Genişletilmiş Kelime Bankası
-const OXFORD_DATA = {
-  "A1-A2": [
-    { eng: "Ability", tr: "Yetenek", ex: "She has the ability to pass the exam." },
-    { eng: "Accept", tr: "Kabul etmek", ex: "I accept your invitation." },
-    { eng: "Accident", tr: "Kaza", ex: "It was a car accident." },
-    { eng: "Achieve", tr: "Başarmak", ex: "He achieved his goal." },
-    { eng: "Address", tr: "Adres", ex: "What is your home address?" },
-    { eng: "Admire", tr: "Hayran olmak", ex: "I admire your courage." },
-    { eng: "Advice", tr: "Tavsiye", ex: "Let me give you some advice." },
-    { eng: "Afford", tr: "Maddi gücü yetmek", ex: "I can't afford a new car." },
-    { eng: "Agreement", tr: "Anlaşma", ex: "We signed the agreement." },
-    { eng: "Allow", tr: "İzin vermek", ex: "My parents allow me to go out." },
-    // ... (Buraya yüzlerce kelime daha eklenebilir)
+// BURASI KELİME DEPOSU - Burayı istediğin kadar uzatabilirsin
+const MASTER_DATA = {
+  "A1-A2 (Başlangıç)": [
+    { eng: "Ability", tr: "Yetenek", ex: "She has the ability to pass." },
+    { eng: "Accept", tr: "Kabul etmek", ex: "I accept your offer." },
+    { eng: "Achieve", tr: "Başarmak", ex: "You can achieve anything." },
+    { eng: "Almost", tr: "Neredeyse", ex: "I am almost there." },
+    { eng: "Believe", tr: "İnanmak", ex: "Believe in yourself." },
+    { eng: "Common", tr: "Yaygın", ex: "It is a common mistake." },
+    { eng: "Decide", tr: "Karar vermek", ex: "Decide your future." },
+    { eng: "Enough", tr: "Yeterli", ex: "That is enough for today." },
+    { eng: "Follow", tr: "Takip etmek", ex: "Follow the rules." },
+    { eng: "Happen", tr: "Olmak/Meydana gelmek", ex: "What happened?" }
   ],
-  "B1-B2": [
-    { eng: "Abstract", tr: "Soyut", ex: "Truth is an abstract concept." },
-    { eng: "Accurate", tr: "Doğru, kesin", ex: "Is this information accurate?" },
-    { eng: "Bargain", tr: "Pazarlık / Kelepir", ex: "This house is a bargain." },
-    { eng: "Candidate", tr: "Aday", ex: "He is a candidate for mayor." },
-    { eng: "Debt", tr: "Borç", ex: "I need to pay my debt." },
-    { eng: "Efficient", tr: "Verimli", ex: "This is an efficient way to work." },
-    { eng: "Frequent", tr: "Sık rastlanan", ex: "He is a frequent visitor." },
-    { eng: "Guarantee", tr: "Garanti", ex: "I guarantee you will like it." },
-    { eng: "Hesitate", tr: "Tereddüt etmek", ex: "Don't hesitate to ask." },
-    { eng: "Influence", tr: "Etki", ex: "Television has a big influence." }
+  "B1-B2 (Orta)": [
+    { eng: "Accurate", tr: "Doğru/Kesin", ex: "Is it accurate?" },
+    { eng: "Benefit", tr: "Fayda", ex: "It has many benefits." },
+    { eng: "Challenge", tr: "Zorluk", ex: "Life is a challenge." },
+    { eng: "Describe", tr: "Tanımlamak", ex: "Describe the person." },
+    { eng: "Efficient", tr: "Verimli", ex: "Work in an efficient way." }
   ],
-  "C1-C2": [
-    { eng: "Ambiguous", tr: "Belirsiz", ex: "The ending of the movie was ambiguous." },
-    { eng: "Convey", tr: "Aktarmak / İletmek", ex: "Please convey my message." },
-    { eng: "Demolish", tr: "Yıkmak (Bina vb.)", ex: "They demolished the old hotel." },
-    { eng: "Elaborate", tr: "Detaylandırmak", ex: "Can you elaborate on that?" },
-    { eng: "Flawless", tr: "Kusursuz", ex: "Her English is flawless." },
-    { eng: "Incentive", tr: "Teşvik", ex: "Money is a powerful incentive." },
-    { eng: "Legitimate", tr: "Meşru / Yasal", ex: "It is a legitimate business." },
-    { eng: "Obscure", tr: "Anlaşılması güç", ex: "The meaning is obscure." },
-    { eng: "Profound", tr: "Derin / Kapsamlı", ex: "A profound sense of guilt." },
-    { eng: "Resilient", tr: "Dirençli", ex: "Children are often very resilient." }
+  "C1-C2 (İleri)": [
+    { eng: "Ambiguous", tr: "Belirsiz", ex: "The answer was ambiguous." },
+    { eng: "Elaborate", tr: "Detaylandırmak", ex: "Please elaborate." },
+    { eng: "Flawless", tr: "Kusursuz", ex: "Your work is flawless." }
   ]
 };
 
-export default function UltimateMarathon() {
-  const [level, setLevel] = useState("A1-A2");
+export default function KidsWordApp() {
+  const [level, setLevel] = useState("A1-A2 (Başlangıç)");
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [results, setResults] = useState({ learned: [], struggle: [] });
-  const [view, setView] = useState("app"); // 'app' veya 'report'
+  const [showReport, setShowReport] = useState(false);
 
-  const words = OXFORD_DATA[level];
+  const words = MASTER_DATA[level];
   const word = words[index];
 
   const speak = (text) => {
@@ -58,88 +45,83 @@ export default function UltimateMarathon() {
     window.speechSynthesis.speak(msg);
   };
 
-  const handleAction = (learned) => {
+  const handleAction = (isLearned) => {
+    const currentWord = words[index];
     setResults(prev => ({
-      learned: learned ? [...prev.learned, word] : prev.learned,
-      struggle: !learned ? [...prev.struggle, word] : prev.struggle
+      learned: isLearned ? [...prev.learned, currentWord] : prev.learned,
+      struggle: !isLearned ? [...prev.struggle, currentWord] : prev.struggle
     }));
-    
     setFlipped(false);
-    if (index < words.length - 1) {
-      setIndex(i => i + 1);
-    } else {
-      setView("report");
-    }
+    if (index < words.length - 1) setIndex(i => i + 1);
+    else setShowReport(true);
   };
-
-  if (view === "report") {
-    return (
-      <div style={styles.container}>
-        <div style={styles.modal}>
-          <h2 style={{color: "#2d3436"}}>🏁 Seviye Özeti</h2>
-          <div style={styles.scrollArea}>
-            <h3 style={{color: "#10ac84"}}>✅ Ezberlenenler ({results.learned.length})</h3>
-            {results.learned.map((w, i) => <p key={i} style={styles.listItem}>{w.eng} - {w.tr}</p>)}
-            <h3 style={{color: "#ee5253", marginTop: "20px"}}>❌ Tekrar Gerekli ({results.struggle.length})</h3>
-            {results.struggle.map((w, i) => <p key={i} style={styles.listItem}>{w.eng} - {w.tr}</p>)}
-          </div>
-          <button style={styles.mainBtn} onClick={() => {setView("app"); setIndex(0); setResults({learned:[], struggle:[]});}}>Sıfırla ve Devam Et</button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div style={styles.container}>
-      <div style={styles.nav}>
-        {Object.keys(OXFORD_DATA).map(l => (
-          <button key={l} onClick={() => {setLevel(l); setIndex(0);}} style={{...styles.navBtn, border: level === l ? "2px solid white" : "none"}}>{l}</button>
+      <div style={styles.navScroll}>
+        {Object.keys(MASTER_DATA).map(l => (
+          <button key={l} onClick={() => {setLevel(l); setIndex(0); setResults({learned:[], struggle:[]});}} style={{...styles.navBtn, backgroundColor: level === l ? "#fff" : "rgba(255,255,255,0.3)", color: level === l ? "#6c5ce7" : "#fff"}}>{l}</button>
         ))}
       </div>
 
-      <div style={styles.counter}>Kalan Kelime: {words.length - index}</div>
-
-      <AnimatePresence mode="wait">
-        <motion.div key={level + index} initial={{x: 100, opacity: 0}} animate={{x: 0, opacity: 1}} exit={{x: -100, opacity: 0}} style={styles.card} onClick={() => {setFlipped(!flipped); if(!flipped) speak(word.eng);}}>
-          {!flipped ? (
-            <div>
-              <h1 style={styles.bigWord}>{word.eng}</h1>
-              <p style={{color: "#b2bec3"}}>Görmek için tıkla</p>
-            </div>
-          ) : (
-            <div>
-              <h2 style={{color: "#764ba2", fontSize: "32px"}}>{word.tr}</h2>
-              <p style={styles.example}>{word.ex}</p>
-              <button style={styles.audioIcon} onClick={(e) => {e.stopPropagation(); speak(word.eng);}}>🔊</button>
-            </div>
-          )}
-        </motion.div>
-      </AnimatePresence>
-
-      <div style={styles.actionGroup}>
-        <button style={{...styles.actionBtn, background: "#ff7675"}} onClick={() => handleAction(false)}>✕</button>
-        <button style={{...styles.actionBtn, background: "#55efc4"}} onClick={() => handleAction(true)}>✓</button>
+      <div style={styles.cardArea}>
+        <AnimatePresence mode="wait">
+          <motion.div key={level + index} initial={{x: 100, opacity: 0}} animate={{x: 0, opacity: 1}} exit={{x: -100, opacity: 0}} style={styles.card} onClick={() => {setFlipped(!flipped); if(!flipped) speak(word.eng);}}>
+            {!flipped ? (
+              <div>
+                <h1 style={styles.wordText}>{word.eng}</h1>
+                <p style={styles.hint}>Türkçesi için dokun 👆</p>
+              </div>
+            ) : (
+              <div>
+                <h2 style={styles.trText}>{word.tr}</h2>
+                <p style={styles.exText}>"{word.ex}"</p>
+                <button style={styles.audioBtn} onClick={(e) => {e.stopPropagation(); speak(word.eng);}}>🔊 Dinle</button>
+              </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
       </div>
 
-      <button style={styles.reportBtn} onClick={() => setView("report")}>📋 Mevcut Listeyi Gör</button>
+      <div style={styles.btnGroup}>
+        <button style={{...styles.actionBtn, background: "#ff7675"}} onClick={() => handleAction(false)}>Zor ✕</button>
+        <button style={{...styles.actionBtn, background: "#55efc4"}} onClick={() => handleAction(true)}>Biliyorum ✓</button>
+      </div>
+
+      {showReport && (
+        <div style={styles.modalOverlay}>
+          <div style={styles.modal}>
+            <h2 style={{color: "#2d3436"}}>Günün Özeti 🌟</h2>
+            <div style={styles.scroll}>
+              <h4 style={{color: "#10ac84"}}>✅ Öğrendiklerin ({results.learned.length})</h4>
+              {results.learned.map((w, i) => <p key={i} style={styles.item}>{w.eng}: {w.tr}</p>)}
+              <h4 style={{color: "#ee5253", marginTop: "15px"}}>❌ Tekrar Etmelisin ({results.struggle.length})</h4>
+              {results.struggle.map((w, i) => <p key={i} style={styles.item}>{w.eng}: {w.tr}</p>)}
+            </div>
+            <button style={styles.closeBtn} onClick={() => setShowReport(false)}>Kapat</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 const styles = {
-  container: { height: "100vh", background: "#6c5ce7", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "sans-serif", color: "white" },
-  nav: { display: "flex", gap: "10px", marginBottom: "20px" },
-  navBtn: { background: "rgba(255,255,255,0.2)", color: "white", padding: "8px 15px", borderRadius: "10px", border: "none", cursor: "pointer" },
-  counter: { marginBottom: "10px", opacity: 0.8 },
-  card: { width: "320px", height: "400px", background: "white", borderRadius: "30px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#2d3436", boxShadow: "0 15px 30px rgba(0,0,0,0.2)", padding: "30px", textAlign: "center" },
-  bigWord: { fontSize: "45px", margin: 0, color: "#2d3436" },
-  example: { marginTop: "20px", color: "#636e72", fontStyle: "italic" },
-  audioIcon: { marginTop: "20px", background: "#f1f2f6", border: "none", borderRadius: "50%", width: "50px", height: "50px", cursor: "pointer" },
-  actionGroup: { marginTop: "30px", display: "flex", gap: "40px" },
-  actionBtn: { width: "70px", height: "70px", borderRadius: "50%", border: "none", color: "white", fontSize: "24px", cursor: "pointer", boxShadow: "0 10px 20px rgba(0,0,0,0.1)" },
-  reportBtn: { marginTop: "30px", background: "none", border: "1px solid white", color: "white", padding: "10px 20px", borderRadius: "10px", cursor: "pointer" },
-  modal: { background: "white", padding: "30px", borderRadius: "20px", width: "320px", maxHeight: "80vh", display: "flex", flexDirection: "column" },
-  scrollArea: { overflowY: "auto", margin: "20px 0", textAlign: "left" },
-  listItem: { color: "#2d3436", padding: "5px 0", borderBottom: "1px solid #eee", fontSize: "14px" },
-  mainBtn: { background: "#6c5ce7", color: "white", border: "none", padding: "12px", borderRadius: "10px", cursor: "pointer" }
+  container: { height: "100vh", background: "linear-gradient(to bottom, #6c5ce7, #a29bfe)", display: "flex", flexDirection: "column", alignItems: "center", padding: "15px", fontFamily: "sans-serif", overflow: "hidden" },
+  navScroll: { display: "flex", gap: "10px", width: "100%", overflowX: "auto", padding: "10px 0" },
+  navBtn: { border: "none", padding: "8px 15px", borderRadius: "20px", fontWeight: "bold", whiteSpace: "nowrap", cursor: "pointer" },
+  cardArea: { flex: 1, display: "flex", alignItems: "center", justifyContent: "center" },
+  card: { width: "320px", height: "450px", background: "white", borderRadius: "35px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "30px", textAlign: "center", boxShadow: "0 20px 40px rgba(0,0,0,0.2)" },
+  wordText: { fontSize: "45px", color: "#2d3436", margin: 0 },
+  hint: { color: "#b2bec3", marginTop: "20px" },
+  trText: { fontSize: "35px", color: "#6c5ce7", fontWeight: "bold" },
+  exText: { marginTop: "20px", color: "#636e72", fontStyle: "italic", fontSize: "18px" },
+  audioBtn: { marginTop: "25px", padding: "12px 25px", borderRadius: "25px", border: "1px solid #6c5ce7", background: "none", color: "#6c5ce7", fontWeight: "bold" },
+  btnGroup: { display: "flex", gap: "25px", marginBottom: "30px" },
+  actionBtn: { width: "100px", height: "100px", borderRadius: "50%", border: "none", color: "white", fontWeight: "bold", fontSize: "20px", boxShadow: "0 10px 20px rgba(0,0,0,0.2)" },
+  modalOverlay: { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.85)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100 },
+  modal: { background: "white", padding: "30px", borderRadius: "30px", width: "90%", maxHeight: "80%" },
+  scroll: { overflowY: "auto", maxHeight: "400px", textAlign: "left" },
+  item: { color: "#2d3436", borderBottom: "1px solid #eee", padding: "8px 0" },
+  closeBtn: { width: "100%", padding: "15px", marginTop: "20px", borderRadius: "20px", border: "none", background: "#6c5ce7", color: "white", fontWeight: "bold" }
 };
