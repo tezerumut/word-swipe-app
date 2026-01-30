@@ -3,94 +3,100 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const WORD_LAYERS = {
   stage1: [
-    { id: 1, eng: "Frequent", tr: "Sık rastlanan", sentence: "Frequent exercise is good for health." },
-    { id: 2, eng: "Essential", tr: "Temel, zorunlu", sentence: "Water is essential for life." },
-    { id: 3, eng: "Achieve", tr: "Başarmak", sentence: "You can achieve your goals." },
-    { id: 4, eng: "Convey", tr: "İletmek", sentence: "Please convey my message to him." },
-    { id: 5, eng: "Resilient", tr: "Dayanıklı", sentence: "She is a resilient person." }
-  ],
-  // Buraya zamanla 1000, 3000 ve 5000 kelime gruplarını ekleyeceğiz
+    { id: 1, eng: "Abandon", tr: "Terk etmek", sentence: "Never abandon your dreams." },
+    { id: 2, eng: "Ability", tr: "Yetenek", sentence: "She has the ability to speak five languages." },
+    { id: 3, eng: "Accurate", tr: "Doğru, kesin", sentence: "The report was accurate and detailed." },
+    { id: 4, eng: "Beneficial", tr: "Faydalı", sentence: "Regular exercise is beneficial for everyone." },
+    { id: 5, eng: "Candidate", tr: "Aday", sentence: "He is a strong candidate for the job." },
+    { id: 6, eng: "Determine", tr: "Belirlemek", sentence: "Your actions determine your future." },
+    { id: 7, eng: "Evidence", tr: "Kanıt", sentence: "There is no evidence to support this claim." },
+    { id: 8, eng: "Flexible", tr: "Esnek", sentence: "Working hours are very flexible here." },
+    { id: 9, eng: "Genuine", tr: "Gerçek, samimi", sentence: "She showed genuine interest in our project." },
+    { id: 10, eng: "Halt", tr: "Durdurmak", sentence: "Production came to a sudden halt." }
+  ]
 };
 
-export default function WordMastery() {
+export default function WordMarathon() {
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [learnedCount, setLearnedCount] = useState(0);
-  const currentWords = WORD_LAYERS.stage1;
-  const word = currentWords[index];
+  const words = WORD_LAYERS.stage1;
+  const word = words[index];
 
   const speak = (text) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';
-    window.speechSynthesis.speak(utterance);
+    const msg = new SpeechSynthesisUtterance(text);
+    msg.lang = 'en-US';
+    window.speechSynthesis.speak(msg);
   };
-
-  useEffect(() => {
-    if (flipped) speak(word.eng);
-  }, [flipped]);
 
   const handleNext = (isLearned) => {
     if (isLearned) setLearnedCount(c => c + 1);
     setFlipped(false);
     setTimeout(() => {
-      if (index < currentWords.length - 1) setIndex(i => i + 1);
-      else alert("Tebrikler! İlk seviyeyi tamamladın. Sırada 3000 kelime hedefi var!");
-    }, 200);
+      if (index < words.length - 1) setIndex(i => i + 1);
+      else alert("Harika! İlk 10 kelimeyi devirdin. Hedef: 1000!");
+    }, 300);
   };
 
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h2 style={styles.title}>Word Marathon: Stage 1</h2>
-        <div style={styles.progressBar}>
-          <div style={{...styles.progressFill, width: `${(learnedCount/currentWords.length)*100}%`}}></div>
+        <h1 style={styles.title}>🚀 1000 Word Challenge</h1>
+        <div style={styles.progressContainer}>
+          <div style={{...styles.progressFill, width: `${(learnedCount/words.length)*100}%`}}></div>
         </div>
-        <p>İlerleme: {learnedCount} / {currentWords.length}</p>
+        <p style={styles.stats}>Başarı: %{Math.round((learnedCount/words.length)*100)}</p>
       </div>
 
       <AnimatePresence mode="wait">
         <motion.div
           key={index}
-          initial={{ rotateY: 90, opacity: 0 }}
-          animate={{ rotateY: 0, opacity: 1 }}
-          exit={{ rotateY: -90, opacity: 0 }}
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 1.2, opacity: 0 }}
           style={styles.card}
-          onClick={() => setFlipped(!flipped)}
+          onClick={() => { setFlipped(!flipped); if(!flipped) speak(word.eng); }}
         >
           {!flipped ? (
-            <div style={styles.cardFront}>?</div>
+            <div style={styles.front}>
+              <span style={styles.tapHint}>Öğrenmek için dokun</span>
+              <h2 style={styles.mainWord}>{word.eng}</h2>
+              <button style={styles.listenIcon}>🔊</button>
+            </div>
           ) : (
-            <div style={styles.cardBack}>
-              <h1 style={styles.wordEng}>{word.eng}</h1>
-              <h3 style={styles.wordTr}>{word.tr}</h3>
-              <p style={styles.sentence}>"{word.sentence}"</p>
-              <button onClick={(e) => { e.stopPropagation(); speak(word.eng); }} style={styles.audioBtn}>🔊 Tekrar Dinle</button>
+            <div style={styles.back}>
+              <h2 style={styles.trWord}>{word.tr}</h2>
+              <div style={styles.divider}></div>
+              <p style={styles.example}>{word.sentence}</p>
             </div>
           )}
         </motion.div>
       </AnimatePresence>
 
-      <div style={styles.btnGroup}>
-        <button style={{...styles.btn, backgroundColor: "#ff4b2b"}} onClick={() => handleNext(false)}>Zorlandım ✕</button>
-        <button style={{...styles.btn, backgroundColor: "#2ecc71"}} onClick={() => handleNext(true)}>Öğrendim ✓</button>
+      <div style={styles.actions}>
+        <button style={{...styles.btn, background: "#ee5253"}} onClick={() => handleNext(false)}>Tekrar Et</button>
+        <button style={{...styles.btn, background: "#10ac84"}} onClick={() => handleNext(true)}>Öğrendim!</button>
       </div>
     </div>
   );
 }
 
 const styles = {
-  container: { height: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "#f8f9fa", fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" },
-  header: { textAlign: "center", marginBottom: "30px", width: "80%" },
-  title: { color: "#2c3e50", margin: "10px 0" },
-  progressBar: { width: "100%", height: "10px", background: "#dfe6e9", borderRadius: "5px", overflow: "hidden", margin: "10px 0" },
-  progressFill: { height: "100%", background: "#3498db", transition: "width 0.3s ease" },
-  card: { width: "320px", height: "450px", background: "white", borderRadius: "25px", boxShadow: "0 15px 35px rgba(0,0,0,0.1)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", padding: "30px", position: "relative" },
-  cardFront: { fontSize: "80px", color: "#3498db", fontWeight: "bold" },
-  cardBack: { textAlign: "center" },
-  wordEng: { fontSize: "38px", color: "#2c3e50", margin: "0" },
-  wordTr: { fontSize: "22px", color: "#e67e22", margin: "10px 0" },
-  sentence: { fontSize: "16px", color: "#7f8c8d", fontStyle: "italic", marginTop: "20px" },
-  audioBtn: { marginTop: "20px", padding: "8px 15px", borderRadius: "20px", border: "1px solid #3498db", background: "none", color: "#3498db", cursor: "pointer" },
-  btnGroup: { display: "flex", gap: "20px", marginTop: "40px" },
-  btn: { padding: "15px 35px", borderRadius: "30px", border: "none", color: "white", fontWeight: "bold", fontSize: "16px", cursor: "pointer", boxShadow: "0 5px 15px rgba(0,0,0,0.1)" }
+  container: { height: "100vh", background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: "white", fontFamily: "sans-serif" },
+  header: { width: "300px", textAlign: "center", marginBottom: "20px" },
+  title: { fontSize: "22px", marginBottom: "15px" },
+  progressContainer: { height: "8px", background: "rgba(255,255,255,0.2)", borderRadius: "10px", overflow: "hidden" },
+  progressFill: { height: "100%", background: "#00d2d3", transition: "0.5s" },
+  stats: { marginTop: "5px", fontSize: "14px", opacity: 0.8 },
+  card: { width: "320px", height: "420px", background: "white", borderRadius: "30px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#2d3436", boxShadow: "0 20px 40px rgba(0,0,0,0.3)", padding: "40px", textAlign: "center", position: "relative" },
+  front: { display: "flex", flexDirection: "column", alignItems: "center" },
+  tapHint: { fontSize: "12px", color: "#b2bec3", marginBottom: "20px", textTransform: "uppercase" },
+  mainWord: { fontSize: "42px", margin: "0" },
+  listenIcon: { marginTop: "20px", background: "none", border: "none", fontSize: "24px" },
+  back: { display: "flex", flexDirection: "column", alignItems: "center" },
+  trWord: { fontSize: "32px", color: "#222f3e" },
+  divider: { width: "50px", height: "4px", background: "#764ba2", margin: "20px 0" },
+  example: { fontSize: "18px", fontStyle: "italic", color: "#576574" },
+  actions: { marginTop: "30px", display: "flex", gap: "15px" },
+  btn: { padding: "15px 30px", borderRadius: "50px", border: "none", color: "white", fontWeight: "bold", fontSize: "16px", cursor: "pointer" }
 };
