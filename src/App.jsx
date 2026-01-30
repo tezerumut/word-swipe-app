@@ -58,49 +58,6 @@ const OXFORD_100 = [
   { eng: "Village", tr: "Köy", ex: "I live in a small ___.", opts: ["village", "visit", "voice", "view"] },
   { eng: "Weather", tr: "Hava", ex: "The ___ is nice today.", opts: ["weather", "weight", "welcome", "western"] },
   { eng: "Young", tr: "Genç", ex: "She is a ___ woman.", opts: ["young", "yesterday", "yellow", "yard"] },
-  { eng: "Active", tr: "Aktif", ex: "She leads an ___ life.", opts: ["active", "actual", "across", "actor"] },
-  { eng: "Almost", tr: "Neredeyse", ex: "I'm ___ finished.", opts: ["almost", "already", "always", "alone"] },
-  { eng: "Amount", tr: "Miktar", ex: "A large ___ of water.", opts: ["amount", "among", "angry", "animal"] },
-  { eng: "Animal", tr: "Hayvan", ex: "What is your favorite ___?", opts: ["animal", "angry", "another", "answer"] },
-  { eng: "Answer", tr: "Cevap", ex: "I don't know the ___.", opts: ["answer", "another", "anyway", "appear"] },
-  { eng: "Anyway", tr: "Her neyse", ex: "___, let's go.", opts: ["anyway", "anyone", "anywhere", "appear"] },
-  { eng: "Appear", tr: "Görünmek", ex: "New stars ___ at night.", opts: ["appear", "apple", "apply", "area"] },
-  { eng: "Around", tr: "Etrafında", ex: "Look ___ you.", opts: ["around", "arrive", "artist", "army"] },
-  { eng: "Basic", tr: "Temel", ex: "It's a ___ need.", opts: ["basic", "basis", "basket", "battle"] },
-  { eng: "Become", tr: "Olmak (dönüşmek)", ex: "He wants to ___ a doctor.", opts: ["become", "before", "begin", "behind"] },
-  { eng: "Behind", tr: "Arkasında", ex: "The cat is ___ the door.", opts: ["behind", "below", "beside", "between"] },
-  { eng: "Beside", tr: "Yanında", ex: "Sit ___ me.", opts: ["beside", "besides", "between", "beyond"] },
-  { eng: "Between", tr: "Arasında", ex: "I'm ___ two jobs.", opts: ["between", "beyond", "behind", "below"] },
-  { eng: "Bottle", tr: "Şişe", ex: "Pass the ___ of water.", opts: ["bottle", "bottom", "bought", "borrow"] },
-  { eng: "Bottom", tr: "Alt", ex: "Sign at the ___.", opts: ["bottom", "bottle", "bought", "borrow"] },
-  { eng: "Bright", tr: "Parlak", ex: "The sun is ___.", opts: ["bright", "bridge", "bring", "brave"] },
-  { eng: "Bridge", tr: "Köprü", ex: "Cross the ___.", opts: ["bridge", "bright", "bring", "brave"] },
-  { eng: "Build", tr: "İnşa etmek", ex: "They will ___ a house.", opts: ["build", "busy", "button", "business"] },
-  { eng: "Busy", tr: "Meşgul", ex: "I am very ___ today.", opts: ["busy", "build", "button", "business"] },
-  { eng: "Camera", tr: "Kamera", ex: "Look at the ___.", opts: ["camera", "cancel", "career", "careful"] },
-  { eng: "Cancel", tr: "İptal etmek", ex: "Don't ___ the meeting.", opts: ["cancel", "camera", "career", "careful"] },
-  { eng: "Center", tr: "Merkez", ex: "Go to the city ___.", opts: ["center", "certain", "change", "charge"] },
-  { eng: "Certain", tr: "Emin", ex: "Are you ___?", opts: ["certain", "center", "change", "charge"] },
-  { eng: "Change", tr: "Değiştirmek", ex: "Time to ___.", opts: ["change", "charge", "cheap", "check"] },
-  { eng: "Cheap", tr: "Ucuz", ex: "It's very ___.", opts: ["cheap", "check", "charge", "change"] },
-  { eng: "Check", tr: "Kontrol etmek", ex: "___ your work.", opts: ["check", "cheap", "charge", "change"] },
-  { eng: "Choice", tr: "Seçim", ex: "You have a ___.", opts: ["choice", "choose", "church", "circle"] },
-  { eng: "Circle", tr: "Daire", ex: "Draw a ___.", opts: ["circle", "church", "city", "clear"] },
-  { eng: "City", tr: "Şehir", ex: "Istanbul is a big ___.", opts: ["city", "circle", "church", "clear"] },
-  { eng: "Clear", tr: "Açık/Net", ex: "Is that ___?", opts: ["clear", "clean", "clever", "climb"] },
-  { eng: "Clever", tr: "Zeki", ex: "He is a ___ boy.", opts: ["clever", "clean", "clear", "climb"] },
-  { eng: "Climb", tr: "Tırmanmak", ex: "___ the mountain.", opts: ["climb", "clean", "clear", "clever"] },
-  { eng: "Common", tr: "Ortak/Yaygın", ex: "A ___ problem.", opts: ["common", "college", "color", "collect"] },
-  { eng: "Company", tr: "Şirket", ex: "I work for a ___.", opts: ["company", "compare", "complete", "confirm"] },
-  { eng: "Complete", tr: "Tamamlamak", ex: "___ the form.", opts: ["complete", "compare", "company", "confirm"] },
-  { eng: "Control", tr: "Kontrol", ex: "Out of ___.", opts: ["control", "confirm", "connect", "contact"] },
-  { eng: "Corner", tr: "Köşe", ex: "Wait at the ___.", opts: ["corner", "correct", "cost", "could"] },
-  { eng: "Correct", tr: "Doğru", ex: "That is ___.", opts: ["correct", "corner", "cost", "could"] },
-  { eng: "Country", tr: "Ülke", ex: "Which ___ are you from?", opts: ["country", "course", "court", "cover"] },
-  { eng: "Course", tr: "Kurs/Ders", ex: "An English ___.", opts: ["course", "country", "court", "cover"] },
-  { eng: "Danger", tr: "Tehlike", ex: "Keep out of ___.", opts: ["danger", "daily", "dark", "daughter"] },
-  { eng: "Dark", tr: "Karanlık", ex: "It's getting ___.", opts: ["dark", "danger", "daily", "daughter"] },
-  { eng: "Daughter", tr: "Kız evlat", ex: "My ___ is 5.", opts: ["daughter", "danger", "daily", "dark"] },
   { eng: "Design", tr: "Tasarım", ex: "I like the ___.", opts: ["design", "describe", "destroy", "detail"] }
 ];
 
@@ -110,9 +67,7 @@ export default function OxfordApp() {
     const saved = localStorage.getItem("pool");
     return saved ? JSON.parse(saved) : OXFORD_100;
   });
-  const [points, setPoints] = useState(() => {
-    return parseInt(localStorage.getItem("points")) || 0;
-  });
+  const [points, setPoints] = useState(() => parseInt(localStorage.getItem("points")) || 0);
   const [view, setView] = useState("learn");
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
@@ -121,13 +76,6 @@ export default function OxfordApp() {
     localStorage.setItem("points", points);
     localStorage.setItem("pool", JSON.stringify(pool));
   }, [points, pool]);
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-    const name = e.target.username.value;
-    setUser(name);
-    localStorage.setItem("username", name);
-  };
 
   const handleAction = (isCorrect) => {
     if (isCorrect) {
@@ -141,30 +89,23 @@ export default function OxfordApp() {
     setFlipped(false);
   };
 
+  const resetAccount = () => {
+    if(confirm("Tüm ilerlemen sıfırlanacak. Emin misin?")) {
+      localStorage.clear();
+      window.location.reload();
+    }
+  };
+
   if (!user) {
     return (
       <div style={styles.container}>
         <motion.div initial={{scale:0.8}} animate={{scale:1}} style={styles.card}>
           <h1 style={{fontSize:'28px', color:'#2d3436', marginBottom:'10px'}}>Kelime Avcısı 🎯</h1>
-          <p style={{color:'#636e72', marginBottom:'30px'}}>İlerlemeni kaydetmek için adını yaz:</p>
-          <form onSubmit={handleLogin} style={{display:'flex', flexDirection:'column', gap:'15px', width:'100%'}}>
+          <form onSubmit={(e) => { e.preventDefault(); const name = e.target.username.value; setUser(name); localStorage.setItem("username", name); }} style={{display:'flex', flexDirection:'column', gap:'15px', width:'100%'}}>
             <input name="username" placeholder="İsmin nedir?" required style={styles.input} />
-            <button type="submit" style={styles.loginBtn}>Öğrenmeye Başla</button>
+            <button type="submit" style={styles.loginBtn}>Başla</button>
           </form>
         </motion.div>
-      </div>
-    );
-  }
-
-  if (pool.length === 0) {
-    return (
-      <div style={styles.container}>
-        <div style={styles.card}>
-          <h1>🏆 Tebrikler {user}!</h1>
-          <p>Tüm 100 kelimeyi öğrendin!</p>
-          <h2>Puanın: {points}</h2>
-          <button onClick={() => {localStorage.clear(); window.location.reload();}} style={styles.loginBtn}>Baştan Başla</button>
-        </div>
       </div>
     );
   }
@@ -173,66 +114,69 @@ export default function OxfordApp() {
 
   return (
     <div style={styles.container}>
+      {/* ÜST PANEL: İSİM, PUAN VE SIFIRLA BUTONU */}
       <div style={styles.topBar}>
-        <div style={styles.badge}>👤 {user}</div>
-        <div style={{...styles.badge, background:'#f1c40f', color:'black'}}>Puan: {points}</div>
-        <div style={styles.badge}>Kalan: {pool.length}</div>
+        <div style={styles.leftInfo}>
+          <span style={styles.topBadge}>👤 {user}</span>
+          <span style={{...styles.topBadge, background:'#f1c40f', color:'black'}}>Puan: {points}</span>
+          <span style={styles.topBadge}>Kalan: {pool.length}</span>
+        </div>
+        <button onClick={resetAccount} style={styles.resetBtn}>✕ Sıfırla</button>
       </div>
 
       <AnimatePresence mode="wait">
-        <motion.div key={pool.length + index} initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} style={styles.card}>
-          {view === "learn" ? (
-            <div onClick={() => setFlipped(!flipped)} style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', justifyContent:'center', cursor:'pointer'}}>
-              {!flipped ? <h1 style={{fontSize:'50px'}}>{current.eng}</h1> : 
-              <div>
-                <h2 style={{color:'#4834d4', fontSize:'32px'}}>{current.tr}</h2>
-                <p style={{fontStyle:'italic', color:'#636e72', marginTop:'20px'}}>{current.ex.replace("___", current.eng)}</p>
-                <small style={{display:'block', marginTop:'30px', color:'#b2bec3'}}>Dönmek için tıkla</small>
-              </div>}
-            </div>
-          ) : (
-            <div style={{width:'100%'}}>
-              <p style={{fontSize:'20px', fontWeight:'bold', marginBottom:'30px'}}>{current.ex}</p>
-              <div style={styles.grid}>
-                {current.opts.map(o => (
-                  <button key={o} onClick={() => {
-                    if(o === current.eng.toLowerCase()) handleAction(true);
-                    else alert("Yanlış! Tekrar dene.");
-                  }} style={styles.optBtn}>{o}</button>
-                ))}
+        {pool.length > 0 ? (
+          <motion.div key={pool.length + index} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} style={styles.card}>
+            {view === "learn" ? (
+              <div onClick={() => setFlipped(!flipped)} style={styles.cardCenter}>
+                {!flipped ? <h1 style={{fontSize:'45px'}}>{current.eng}</h1> : 
+                <div>
+                  <h2 style={{color:'#4834d4'}}>{current.tr}</h2>
+                  <p style={{fontStyle:'italic', color:'#636e72', marginTop:'15px'}}>{current.ex.replace("___", current.eng)}</p>
+                </div>}
               </div>
-            </div>
-          )}
-        </motion.div>
+            ) : (
+              <div style={{width:'100%'}}>
+                <p style={{fontSize:'18px', fontWeight:'bold', marginBottom:'20px'}}>{current.ex}</p>
+                <div style={styles.grid}>
+                  {current.opts.map(o => <button key={o} onClick={() => o === current.eng.toLowerCase() ? handleAction(true) : alert("Yanlış!")} style={styles.optBtn}>{o}</button>)}
+                </div>
+              </div>
+            )}
+          </motion.div>
+        ) : (
+          <div style={styles.card}><h1>🏆 Bitti!</h1><button onClick={resetAccount} style={styles.loginBtn}>Baştan Başla</button></div>
+        )}
       </AnimatePresence>
 
       <div style={styles.bottomNav}>
         <button onClick={() => setView(view === 'learn' ? 'quiz' : 'learn')} style={styles.modeBtn}>
           {view === 'learn' ? '🎯 Quiz Moduna Geç' : '📖 Kartlara Dön'}
         </button>
-        {view === 'learn' && (
+        {view === 'learn' && pool.length > 0 && (
           <div style={{display:'flex', gap:'20px', marginTop:'20px'}}>
             <button onClick={() => handleAction(false)} style={{...styles.actionBtn, background:'#ff7675'}}>Zor ✕</button>
             <button onClick={() => handleAction(true)} style={{...styles.actionBtn, background:'#55efc4'}}>Biliyorum ✓</button>
           </div>
         )}
       </div>
-      <button onClick={() => {if(confirm('Çıkış yapılsın mı?')) {localStorage.clear(); window.location.reload();}}} style={styles.exitLink}>Hesabı Sıfırla / Çıkış</button>
     </div>
   );
 }
 
 const styles = {
   container: { height: '100vh', background: '#2d3436', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: 'sans-serif' },
-  topBar: { position: 'absolute', top: '20px', display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent:'center' },
-  badge: { background: '#485e6a', padding: '8px 15px', borderRadius: '20px', color: 'white', fontSize: '14px', fontWeight: 'bold' },
-  card: { background: 'white', padding: '30px', borderRadius: '40px', width: '100%', maxWidth: '360px', height: '420px', textAlign: 'center', display: 'flex', flexDirection:'column', alignItems: 'center', justifyContent: 'center', boxShadow: '0 20px 50px rgba(0,0,0,0.4)' },
+  topBar: { position: 'absolute', top: '0', left: '0', right: '0', padding: '15px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.2)' },
+  leftInfo: { display: 'flex', gap: '8px' },
+  topBadge: { background: '#485e6a', padding: '5px 12px', borderRadius: '15px', color: 'white', fontSize: '13px', fontWeight: 'bold' },
+  resetBtn: { background: '#eb4d4b', color: 'white', border: 'none', padding: '6px 15px', borderRadius: '10px', fontSize: '13px', fontWeight: 'bold', cursor: 'pointer' },
+  card: { background: 'white', padding: '30px', borderRadius: '40px', width: '100%', maxWidth: '360px', height: '400px', textAlign: 'center', display: 'flex', flexDirection:'column', alignItems: 'center', justifyContent: 'center', boxShadow: '0 20px 50px rgba(0,0,0,0.4)' },
+  cardCenter: { width:'100%', height:'100%', display:'flex', flexDirection:'column', justifyContent:'center', cursor:'pointer' },
   input: { padding: '15px', borderRadius: '15px', border: '2px solid #dfe6e9', fontSize: '18px', outline: 'none' },
-  loginBtn: { padding: '15px', background: '#55efc4', border: 'none', borderRadius: '15px', fontWeight: 'bold', cursor: 'pointer', fontSize: '18px' },
+  loginBtn: { padding: '15px', background: '#55efc4', border: 'none', borderRadius: '15px', fontWeight: 'bold', cursor: 'pointer' },
   grid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', width: '100%' },
-  optBtn: { padding: '15px', borderRadius: '15px', border: '1px solid #dfe6e9', background: '#f5f6fa', fontWeight: 'bold', cursor: 'pointer' },
+  optBtn: { padding: '12px', borderRadius: '12px', border: '1px solid #dfe6e9', background: '#f5f6fa', fontWeight: 'bold', cursor: 'pointer' },
   bottomNav: { marginTop: '30px', textAlign: 'center' },
   modeBtn: { background: '#f1c40f', border: 'none', padding: '10px 25px', borderRadius: '20px', fontWeight: 'bold', cursor: 'pointer' },
-  actionBtn: { padding: '15px 35px', borderRadius: '20px', border: 'none', color: 'white', fontWeight: 'bold', cursor: 'pointer' },
-  exitLink: { position:'absolute', bottom:'20px', background:'none', border:'none', color:'#636e72', cursor:'pointer', textDecoration:'underline' }
+  actionBtn: { padding: '15px 35px', borderRadius: '20px', border: 'none', color: 'white', fontWeight: 'bold', cursor: 'pointer' }
 };
