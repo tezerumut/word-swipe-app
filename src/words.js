@@ -1,21 +1,59 @@
-// src/words.js
 export const OXFORD_3000 = {
-  "A1-A2": [
-    { eng: "Ability", tr: "Yetenek", ex: "He has the ability to swim." },
-    { eng: "Abandon", tr: "Terk etmek", ex: "Don't abandon your hope." },
-    { eng: "Absolute", tr: "Kesin, tam", ex: "It's the absolute truth." },
-    { eng: "Academic", tr: "Akademik", ex: "He has an academic career." },
-    { eng: "Accompany", tr: "Eşlik etmek", ex: "May I accompany you?" },
+  "A1-A2 (Başlangıç)": [
+    { eng: "Ability", tr: "Yetenek", ex: "She has the ability to pass the exam." },
+    { eng: "Abandon", tr: "Terk etmek", ex: "Never abandon your dreams." },
+    { eng: "Absolute", tr: "Kesin, tam", ex: "It is the absolute truth." },
+    { eng: "Academic", tr: "Akademik", ex: "He has a successful academic career." },
+    { eng: "Accept", tr: "Kabul etmek", ex: "I accept your invitation." },
+    { eng: "Accompany", tr: "Eşlik etmek", ex: "May I accompany you to the bus stop?" },
     { eng: "Account", tr: "Hesap", ex: "I need to open a bank account." },
     { eng: "Accurate", tr: "Doğru, kesin", ex: "This map is very accurate." },
-    { eng: "Accuse", tr: "Suçlamak", ex: "Don't accuse me of lying." },
-    { eng: "Achieve", tr: "Başarmak", ex: "You can achieve anything." },
-    { eng: "Acknowledge", tr: "Kabul etmek, tanımak", ex: "He acknowledged his mistake." }
-    // Buraya 3000 kelimeye kadar ekleme yapabiliriz.
+    { eng: "Achieve", tr: "Başarmak", ex: "You can achieve anything you want." },
+    { eng: "Acknowledge", tr: "Kabul etmek", ex: "He acknowledged his mistake." },
+    { eng: "Acquire", tr: "Edinmek, kazanmak", ex: "I managed to acquire all the books." },
+    { eng: "Across", tr: "Karşıdan karşıya", ex: "The cat ran across the street." },
+    { eng: "Act", tr: "Hareket etmek, rol almak", ex: "You must act quickly." },
+    { eng: "Active", tr: "Aktif, hareketli", ex: "She is very active in sports." },
+    { eng: "Actual", tr: "Gerçek, asıl", ex: "The actual cost was much higher." },
+    { eng: "Adapt", tr: "Uyum sağlamak", ex: "It's hard to adapt to a new city." },
+    { eng: "Add", tr: "Eklemek", ex: "Add some salt to the soup." },
+    { eng: "Address", tr: "Adres", ex: "What is your home address?" },
+    { eng: "Adjust", tr: "Ayarlamak", ex: "You can adjust the seat height." },
+    { eng: "Admire", tr: "Hayran olmak", ex: "I admire your courage." },
+    { eng: "Admit", tr: "Kabul etmek, itiraf etmek", ex: "He admitted that he was wrong." },
+    { eng: "Adopt", tr: "Evlat edinmek / Benimsemek", ex: "They decided to adopt a child." },
+    { eng: "Adult", tr: "Yetişkin", ex: "This movie is for adults." },
+    { eng: "Advance", tr: "İlerlemek", ex: "Technology is advancing fast." },
+    { eng: "Advantage", tr: "Avantaj", ex: "Being tall is an advantage in basketball." },
+    { eng: "Adventure", tr: "Macera", ex: "I love reading adventure stories." },
+    { eng: "Advice", tr: "Tavsiye", ex: "Can you give me some advice?" },
+    { eng: "Afford", tr: "Maddi gücü yetmek", ex: "I can't afford a new car." },
+    { eng: "Afraid", tr: "Korkmuş", ex: "Don't be afraid of the dark." },
+    { eng: "After", tr: "Sonra", ex: "I will call you after work." },
+    { eng: "Afternoon", tr: "Öğleden sonra", ex: "See you this afternoon." },
+    { eng: "Again", tr: "Tekrar", ex: "Can you say that again?" },
+    { eng: "Against", tr: "Karşı", ex: "We are playing against them." },
+    { eng: "Age", tr: "Yaş", ex: "What is your age?" },
+    { eng: "Agency", tr: "Ajans", ex: "He works for an advertising agency." },
+    { eng: "Agent", tr: "Ajan, temsilci", ex: "Call our travel agent." },
+    { eng: "Aggressive", tr: "Saldırgan", ex: "His behavior was very aggressive." },
+    { eng: "Agree", tr: "Aynı fikirde olmak", ex: "I agree with you." },
+    { eng: "Agriculture", tr: "Tarım", ex: "Agriculture is important for our country." },
+    { eng: "Ahead", tr: "İleride", ex: "The road ahead is clear." },
+    { eng: "Aim", tr: "Hedef, amaç", ex: "My aim is to learn English." },
+    { eng: "Air", tr: "Hava", ex: "Let's go out for some fresh air." },
+    { eng: "Aircraft", tr: "Hava taşıtı", ex: "The aircraft landed safely." },
+    { eng: "Airport", tr: "Havalimanı", ex: "I'm going to the airport." },
+    { eng: "Alarm", tr: "Alarm", ex: "The alarm went off at 7 AM." },
+    { eng: "Alive", tr: "Hayatta, canlı", ex: "Is that spider still alive?" },
+    { eng: "All", tr: "Hepsi", ex: "All my friends are here." },
+    { eng: "Allow", tr: "İzin vermek", ex: "Smoking is not allowed here." },
+    { eng: "Almost", tr: "Neredeyse", ex: "I am almost finished." },
+    { eng: "Alone", tr: "Yalnız", ex: "She likes living alone." }
   ],
-  "B1-B2": [
-    { eng: "Beneficial", tr: "Faydalı", ex: "Exercise is beneficial for health." },
-    { eng: "Capacity", tr: "Kapasite", ex: "The hall has a large capacity." },
-    { eng: "Challenge", tr: "Zorluk, mücadele", ex: "It was a big challenge for me." }
+  "B1-B2 (Orta)": [
+    { eng: "Bargain", tr: "Pazarlık / Kelepir", ex: "This house is a real bargain." },
+    { eng: "Calculate", tr: "Hesaplamak", ex: "We need to calculate the cost." }
+    // Diğer kelimeler buraya eklenecek...
   ]
 };
