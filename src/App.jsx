@@ -8,6 +8,7 @@ const App = () => {
   const [wordIndex, setWordIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [isListening, setIsListening] = useState(false);
+  const [isCorrectSpeech, setIsCorrectSpeech] = useState(false); // Yeşil tik kontrolü
   const [canHear, setCanHear] = useState(true);
   const [canSpeak, setCanSpeak] = useState(true);
   const [showDetails, setShowDetails] = useState(false);
@@ -17,7 +18,6 @@ const App = () => {
   const currentData = VOCABULARY_DB[currentLevel][wordIndex];
   const remaining = VOCABULARY_DB[currentLevel].length - (wordIndex + 1);
 
-  // Sesli Telaffuz
   const speakWord = (text) => {
     if (!canHear) return;
     window.speechSynthesis.cancel();
@@ -26,7 +26,6 @@ const App = () => {
     window.speechSynthesis.speak(utterance);
   };
 
-  // Sesli Yanıtı Dinleme
   const listen = () => {
     if (!canSpeak) return;
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -40,7 +39,15 @@ const App = () => {
     recognition.onresult = (event) => {
       const result = event.results[0][0].transcript.toUpperCase();
       setIsListening(false);
-      if (result.includes(currentData.word)) handleSwipe(true);
+      
+      // Kelime doğru telaffuz edildiyse
+      if (result.includes(currentData.word)) {
+        setIsCorrectSpeech(true); // Yeşil tiki göster
+        setTimeout(() => {
+          setIsCorrectSpeech(false);
+          handleSwipe(true); // 1 saniye sonra kartı sağa fırlat
+        }, 1000);
+      }
     };
     recognition.onerror = () => setIsListening(false);
   };
@@ -55,7 +62,7 @@ const App = () => {
       if (wordIndex + 1 < VOCABULARY_DB[currentLevel].length) {
         setWordIndex(wordIndex + 1);
       } else if (levelIndex + 1 < levels.length) {
-        alert(`${currentLevel} Level Done! Next: ${levels[levelIndex + 1]}`);
+        alert(`${currentLevel} Seviyesi Bitti! Yeni Seviye: ${levels[levelIndex + 1]}`);
         setLevelIndex(levelIndex + 1);
         setWordIndex(0);
       }
@@ -64,17 +71,17 @@ const App = () => {
 
   return (
     <div style={s.container}>
-      {/* Üst Bar: Seviye, Skor ve Kontroller */}
+      {/* Üst Bar */}
       <div style={s.header}>
         <div style={s.stats}>LEVEL: {currentLevel} | SCORE: {score}</div>
-        <div style={s.remaining}>REMAINING: {remaining}</div>
+        <div style={s.remaining}>KALAN: {remaining}</div>
         <div style={s.toggleGroup}>
           <button onClick={() => setCanHear(!canHear)} style={s.toggle(canHear)}>{canHear ? "🔊 Duyabiliyorum" : "🔇 Duyamıyorum"}</button>
           <button onClick={() => setCanSpeak(!canSpeak)} style={s.toggle(canSpeak)}>{canSpeak ? "🎤 Konuşabiliyorum" : "🙊 Konuşamıyorum"}</button>
         </div>
       </div>
 
-      {/* Ana Kart (Swipe & Click) */}
+      {/* Ana Kart */}
       <AnimatePresence mode="wait">
         <motion.div
           key={currentData.word}
@@ -90,7 +97,14 @@ const App = () => {
           style={s.card}
           onClick={() => { setShowDetails(true); speakWord(currentData.word); listen(); }}
         >
-          <span style={s.hintLabel}>CLICK TO HEAR & REVEAL | SWIPE TO PASS</span>
+          {/* Yeşil Tik Animasyonu */}
+          {isCorrectSpeech && (
+            <motion.div initial={{ scale: 0 }} animate={{ scale: 1.5 }} style={s.successBadge}>
+              ✔
+            </motion.div>
+          )}
+
+          <span style={s.hintLabel}>DINLEMEK VE ANLAM İÇIN TIKLA | GEÇMEK İÇİN KAYDIR</span>
           <h1 style={s.word}>{currentData.word}</h1>
           
           {showDetails && (
@@ -98,18 +112,18 @@ const App = () => {
               <div style={s.meaning}>{currentData.meaning.toUpperCase()}</div>
               <p style={s.definition}>{currentData.hint}</p>
               <div style={s.exampleBox}>
-                <strong>EXAMPLE:</strong>
+                <strong>CÜMLE:</strong>
                 <p>"{currentData.example}"</p>
               </div>
-              {isListening && <div style={s.listening}>LISTENING...</div>}
+              {isListening && <div style={s.listening}>SİZİ DİNLİYORUM...</div>}
             </motion.div>
           )}
         </motion.div>
       </AnimatePresence>
 
       <div style={s.footer}>
-        <button onClick={() => handleSwipe(false)} style={s.btn("#ef4444")}>BİLMİYORUM</button>
-        <button onClick={() => handleSwipe(true)} style={s.btn("#22c55e")}>BİLİYORUM</button>
+        <button onClick={() => handleSwipe(false)} style={s.btn("#ef4444")}>BİLMİYORUM (SOL)</button>
+        <button onClick={() => handleSwipe(true)} style={s.btn("#22c55e")}>BİLİYORUM (SAĞ)</button>
       </div>
     </div>
   );
@@ -117,21 +131,22 @@ const App = () => {
 
 const s = {
   container: { height: "100vh", backgroundColor: "#0f172a", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "Inter, sans-serif", color: "#f8fafc", overflow: "hidden" },
-  header: { position: "absolute", top: 0, width: "100%", padding: "15px 30px", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#1e293b", borderBottom: "1px solid #334155" },
+  header: { position: "absolute", top: 0, width: "100%", padding: "15px 30px", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#1e293b", borderBottom: "1px solid #334155", zIndex: 10 },
   stats: { fontSize: "14px", fontWeight: "bold", color: "#38bdf8" },
   remaining: { fontSize: "12px", color: "#94a3b8" },
   toggleGroup: { display: "flex", gap: "8px" },
   toggle: (active) => ({ padding: "6px 10px", borderRadius: "6px", border: "none", cursor: "pointer", background: active ? "#334155" : "#7f1d1d", color: "#fff", fontSize: "11px" }),
-  card: { width: "380px", minHeight: "520px", background: "#1e293b", borderRadius: "24px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "40px", cursor: "grab", border: "1px solid #334155", textAlign: "center", boxShadow: "0 25px 50px rgba(0,0,0,0.5)" },
+  card: { position: "relative", width: "380px", minHeight: "520px", background: "#1e293b", borderRadius: "24px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "40px", cursor: "grab", border: "1px solid #334155", textAlign: "center", boxShadow: "0 25px 50px rgba(0,0,0,0.5)" },
+  successBadge: { position: "absolute", top: "40%", color: "#22c55e", fontSize: "100px", zIndex: 20, textShadow: "0 0 20px rgba(34, 197, 94, 0.5)" },
   word: { fontSize: "44px", letterSpacing: "3px", margin: "15px 0" },
   hintLabel: { fontSize: "10px", color: "#38bdf8", letterSpacing: "1px" },
   details: { width: "100%", marginTop: "20px" },
   meaning: { color: "#22c55e", fontWeight: "bold", fontSize: "18px", marginBottom: "10px" },
   definition: { color: "#94a3b8", fontSize: "15px", fontStyle: "italic", marginBottom: "15px" },
   exampleBox: { background: "#0f172a", padding: "15px", borderRadius: "12px", fontSize: "13px", textAlign: "left", borderLeft: "4px solid #38bdf8" },
-  listening: { marginTop: "15px", color: "#fbbf24", fontWeight: "bold", fontSize: "12px" },
+  listening: { marginTop: "15px", color: "#fbbf24", fontWeight: "bold", fontSize: "12px", letterSpacing: "1px" },
   footer: { display: "flex", gap: "20px", marginTop: "40px" },
-  btn: (clr) => ({ padding: "16px 30px", borderRadius: "12px", border: `2px solid ${clr}`, background: "transparent", color: clr, fontWeight: "bold", cursor: "pointer" })
+  btn: (clr) => ({ padding: "16px 30px", borderRadius: "12px", border: `2px solid ${clr}`, background: "transparent", color: clr, fontWeight: "bold", cursor: "pointer", fontSize: "14px" })
 };
 
 export default App;
