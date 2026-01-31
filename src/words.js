@@ -4,63 +4,62 @@ export const VOCABULARY_DB = {
       word: "ABANDON", 
       meaning: "Terk etmek", 
       hint: "To leave forever.", 
-      example: "Do not abandon your hopes." 
+      example: "Never abandon your dreams." 
     },
     { 
       word: "ACCENT", 
       meaning: "Aksan", 
       hint: "Way of speaking.", 
-      example: "I love your French accent." 
+      example: "She has a beautiful accent." 
     },
     { 
       word: "APPLE", 
       meaning: "Elma", 
-      hint: "A red or green fruit.", 
-      example: "An apple a day keeps the doctor away." 
+      hint: "A common fruit.", 
+      example: "I want to eat a red apple." 
     },
     { 
-      word: "BOOK", 
-      meaning: "Kitap", 
-      hint: "You read it.", 
-      example: "I am reading a great book." 
+      word: "ALONE", 
+      meaning: "Yalnız", 
+      hint: "Without other people.", 
+      example: "I don't like being alone at home." 
     },
     { 
-      word: "CAT", 
-      meaning: "Kedi", 
-      hint: "A small furry pet.", 
-      example: "The cat is sitting on the mat." 
+      word: "ANGRY", 
+      meaning: "Kızgın", 
+      hint: "Feeling mad.", 
+      example: "My father is very angry now." 
     },
     { 
-      word: "DOG", 
-      meaning: "Köpek", 
-      hint: "Man's best friend.", 
-      example: "My dog barks at strangers." 
+      word: "ANIMAL", 
+      meaning: "Hayvan", 
+      hint: "Living thing like a dog.", 
+      example: "A lion is a wild animal." 
     },
     { 
-      word: "EGG", 
-      meaning: "Yumurta", 
-      hint: "Chicken product.", 
-      example: "He eats two eggs every morning." 
+      word: "ANSWER", 
+      meaning: "Cevap", 
+      hint: "Reaction to a question.", 
+      example: "Please give me an answer." 
     },
     { 
-      word: "FISH", 
-      meaning: "Balık", 
-      hint: "It swims in water.", 
-      example: "Goldfish are very popular pets." 
+      word: "ARRIVAL", 
+      meaning: "Varış", 
+      hint: "Reaching a place.", 
+      example: "The plane arrival is at 10 PM." 
     },
     { 
-      word: "GARDEN", 
-      meaning: "Bahçe", 
-      hint: "Place with flowers.", 
-      example: "The kids are playing in the garden." 
+      word: "ART", 
+      meaning: "Sanat", 
+      hint: "Painting or music.", 
+      example: "I love modern art museums." 
     },
     { 
-      word: "HAPPY", 
-      meaning: "Mutlu", 
-      hint: "Feeling good.", 
-      example: "Music makes me very happy." 
+      word: "ATTACK", 
+      meaning: "Saldırı", 
+      hint: "Act of violence.", 
+      example: "The army began the attack." 
     }
-    // Daha fazla kelime ekledikçe bu formatta devam edeceğiz.
   ],
   A2: [],
   B1: [],
