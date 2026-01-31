@@ -19,7 +19,6 @@ const App = () => {
   const levelWords = useMemo(() => VOCABULARY_DB[currentLevel] || [], [currentLevel]);
   const currentData = levelWords[wordIndex];
 
-  // SESLİ OKUMA
   const speakWord = (text) => {
     if (!text) return;
     window.speechSynthesis.cancel();
@@ -28,7 +27,6 @@ const App = () => {
     window.speechSynthesis.speak(utterance);
   };
 
-  // SESLİ DİNLEME (BU KISIM KESİNLİKLE AKTİF)
   const listen = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) return;
@@ -39,7 +37,6 @@ const App = () => {
     recognition.onresult = (event) => {
       const result = event.results[0][0].transcript.toUpperCase();
       setIsListening(false);
-      // Doğruysa onay tiki çıkar
       if (currentData && result.includes(currentData.word.toUpperCase())) {
         setIsCorrectSpeech(true);
         setTimeout(() => setIsCorrectSpeech(false), 2000); 
@@ -49,9 +46,11 @@ const App = () => {
   };
 
   const handleManualAction = (known) => {
+    let currentKnownCount = knownWordsInLevel;
     if (known) {
       setScore(prev => prev + 10);
-      setKnownWordsInLevel(prev => prev + 1);
+      currentKnownCount += 1;
+      setKnownWordsInLevel(currentKnownCount);
     } else {
       if (currentData && !mistakes.find(m => m.word === currentData.word)) {
         setMistakes(prev => [...prev, { word: currentData.word, meaning: currentData.meaning }]);
@@ -68,41 +67,43 @@ const App = () => {
       if (wordIndex + 1 < levelWords.length) {
         setWordIndex(prev => prev + 1);
       } else {
-        // LİSTE SONU KONTROLÜ
-        const finalKnownCount = knownWordsInLevel + (known ? 1 : 0);
-        if (finalKnownCount === levelWords.length) {
+        // LİSTE SONU: KESİNLİKLE BURADA TAKILMAYACAK
+        if (currentKnownCount === levelWords.length) {
           if (levelIndex + 1 < levels.length) {
-            alert(`Tebrikler! ${currentLevel} bitti. Hepsi öğrenildi.`);
+            alert("Tebrikler! Seviyeyi %100 başarıyla tamamladın. Bir sonraki seviye yükleniyor...");
             setLevelIndex(prev => prev + 1);
             setWordIndex(0);
             setKnownWordsInLevel(0);
+          } else {
+            alert("Muhteşem! Tüm Oxford listesini bitirdin.");
           }
         } else {
-          alert(`Eksik kelimeler var! Tümünü 'Biliyorum' yapana kadar bu seviyeden çıkış yok. Başa dönülüyor.`);
+          alert(`Tüm kelimeleri öğrenmedin (${currentKnownCount}/${levelWords.length}). Başa dönülüyor!`);
           setWordIndex(0);
-          setKnownWordsInLevel(0); // Bu seviyeyi temizleyip tekrar hepsini bilmeni istiyoruz
+          setKnownWordsInLevel(0);
         }
       }
     }, 300);
   };
 
-  if (!currentData) return <div style={s.container}>Yükleniyor...</div>;
+  // EĞER KELİME YOKSA (HATA ÖNLEYİCİ)
+  if (!currentData && levelWords.length > 0) {
+     return <div style={s.container}>Yükleniyor...</div>;
+  }
 
   return (
     <div style={s.container}>
       <div style={s.header}>
         <div style={s.stats}>{currentLevel} • {score} XP</div>
-        <div style={s.levelProgress}>TAMAMLANAN: {knownWordsInLevel} / {levelWords.length}</div>
+        <div style={s.levelProgress}>BİLİNEN: {knownWordsInLevel} / {levelWords.length}</div>
       </div>
 
-      <button onClick={() => setShowMistakeList(true)} style={s.mistakeBtn}>
-        📖 ÇALIŞMA LİSTEM ({mistakes.length})
-      </button>
+      <button onClick={() => setShowMistakeList(true)} style={s.mistakeBtn}>📖 ÇALIŞMA LİSTEM ({mistakes.length})</button>
 
       <div style={s.cardWrapper}>
         <AnimatePresence mode="wait">
           <motion.div
-            key={currentData.word}
+            key={currentData?.word || "end"}
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
             onDragEnd={(e, { offset }) => {
@@ -113,20 +114,15 @@ const App = () => {
             animate={{ scale: 1, opacity: 1, x: 0 }}
             exit={{ x: direction, opacity: 0 }}
             style={s.card}
-            onClick={() => { setShowDetails(true); speakWord(currentData.word); listen(); }}
+            onClick={() => { setShowDetails(true); speakWord(currentData?.word); listen(); }}
           >
-            {/* ONAY TİKİ */}
-            {isCorrectSpeech && (
-              <motion.div initial={{ scale: 0 }} animate={{ scale: 1.2 }} style={s.successBadge}>✔</motion.div>
-            )}
-
-            <h1 style={s.word}>{currentData.word}</h1>
-            
+            {isCorrectSpeech && <motion.div initial={{ scale: 0 }} animate={{ scale: 1.2 }} style={s.successBadge}>✔</motion.div>}
+            <h1 style={s.word}>{currentData?.word}</h1>
             {showDetails && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={s.details}>
-                <div style={s.meaning}>{currentData.meaning.toUpperCase()}</div>
-                <p style={s.definition}>{currentData.hint}</p>
-                {isListening && <div style={s.listening}>SİZİ DİNLİYORUM...</div>}
+                <div style={s.meaning}>{currentData?.meaning.toUpperCase()}</div>
+                <p style={s.definition}>{currentData?.hint}</p>
+                {isListening && <div style={s.listening}>DİNLİYORUM...</div>}
               </motion.div>
             )}
             {!showDetails && <p style={s.tapHint}>TIKLA, DİNLE VE KONUŞ</p>}
@@ -134,7 +130,6 @@ const App = () => {
         </AnimatePresence>
       </div>
 
-      {/* ÇALIŞMA LİSTESİ MODALI */}
       <AnimatePresence>
         {showMistakeList && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={s.modalOverlay}>
