@@ -1,3 +1,4 @@
+import { db } from "./firebase";
 import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { VOCABULARY_DB } from "./words";
