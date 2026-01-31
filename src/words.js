@@ -1,123 +1,190 @@
-export const VOCABULARY_DB = {
-  A1: [
-    // A-B GRUBU
-    { word: "ABANDON", meaning: "Terk etmek", hint: "To leave forever.", example: "Don't abandon your dreams." },
-    { word: "ABILITY", meaning: "Yetenek", hint: "Power to do something.", example: "She has great musical ability." },
-    { word: "ABOUT", meaning: "Hakkında", hint: "On the subject of.", example: "Tell me about it." },
-    { word: "ABOVE", meaning: "Üzerinde", hint: "Higher than.", example: "The sun is above us." },
-    { word: "ABROAD", meaning: "Yurt dışı", hint: "Foreign country.", example: "I want to study abroad." },
-    { word: "ABSENCE", meaning: "Yokluk", hint: "Not being present.", example: "His absence was noticed." },
-    { word: "ABSOLUTE", meaning: "Kesin", hint: "Complete and total.", example: "It is the absolute truth." },
-    { word: "ACCENT", meaning: "Aksan", hint: "Way of speaking.", example: "She has a British accent." },
-    { word: "ACCEPT", meaning: "Kabul etmek", hint: "To say yes to.", example: "I accept your offer." },
-    { word: "ACCIDENT", meaning: "Kaza", hint: "Unplanned bad event.", example: "It was just an accident." },
-    { word: "ACCOMMODATION", meaning: "Konaklama", hint: "Place to stay.", example: "Hotel accommodation is expensive." },
-    { word: "ACCOUNT", meaning: "Hesap", hint: "Bank arrangement.", example: "I have a bank account." },
-    { word: "ACHIEVE", meaning: "Başarmak", hint: "To succeed.", example: "You can achieve anything." },
-    { word: "ACROSS", meaning: "Karşıdan karşıya", hint: "Other side of.", example: "Walk across the bridge." },
-    { word: "ACT", meaning: "Eylem/Rol", hint: "To do or perform.", example: "Think before you act." },
-    { word: "ACTIVE", meaning: "Aktif", hint: "Busy and moving.", example: "Keep your mind active." },
-    { word: "ACTOR", meaning: "Oyuncu", hint: "Stage performer.", example: "He is a famous actor." },
-    { word: "ADD", meaning: "Eklemek", hint: "To join to.", example: "Add some salt." },
-    { word: "ADDRESS", meaning: "Adres", hint: "Building location.", example: "Write down your address." },
-    { word: "ADULT", meaning: "Yetişkin", hint: "Fully grown person.", example: "This movie is for adults." },
-    { word: "ADVICE", meaning: "Tavsiye", hint: "Helpful suggestion.", example: "Let me give you some advice." },
-    { word: "AFRAID", meaning: "Korkmuş", hint: "Feeling fear.", example: "Don't be afraid." },
-    { word: "AFTER", meaning: "Sonra", hint: "Later than.", example: "Call me after work." },
-    { word: "AGAIN", meaning: "Tekrar", hint: "Once more.", example: "Try again." },
-    { word: "AGE", meaning: "Yaş", hint: "Years lived.", example: "What is your age?" },
-    { word: "AGREE", meaning: "Anlaşmak", hint: "Same opinion.", example: "I agree with you." },
-    { word: "AIR", meaning: "Hava", hint: "Invisible gas.", example: "Breath the fresh air." },
-    { word: "AIRPORT", meaning: "Havalimanı", hint: "Plane station.", example: "Go to the airport." },
-    { word: "ALL", meaning: "Hepsi", hint: "Whole amount.", example: "All my friends are here." },
-    { word: "ALONE", meaning: "Yalnız", hint: "Without others.", example: "I am not alone." },
-    { word: "ALREADY", meaning: "Zaten", hint: "Before now.", example: "I already ate." },
-    { word: "ALSO", meaning: "Ayrıca", hint: "In addition.", example: "I am also a teacher." },
-    { word: "ALWAYS", meaning: "Her zaman", hint: "Every time.", example: "Always tell the truth." },
-    { word: "AMAZING", meaning: "Harika", hint: "Surprising/Good.", example: "The food is amazing." },
-    { word: "ANGER", meaning: "Öfke", hint: "Strong dislike.", example: "Control your anger." },
-    { word: "ANIMAL", meaning: "Hayvan", hint: "Living creature.", example: "I love animals." },
-    { word: "ANOTHER", meaning: "Başka", hint: "One more.", example: "Have another one." },
-    { word: "ANSWER", meaning: "Cevap", hint: "Reply.", example: "Answer the phone." },
-    { word: "ANYTHING", meaning: "Herhangi bir şey", hint: "Any object.", example: "Do you need anything?" },
-    { word: "APPLE", meaning: "Elma", hint: "A red fruit.", example: "Eat an apple." },
-    { word: "AREA", meaning: "Alan", hint: "Part of place.", example: "This is a play area." },
-    { word: "ARM", meaning: "Kol", hint: "Body part.", example: "Lift your arm." },
-    { word: "AROUND", meaning: "Etrafında", hint: "In a circle.", example: "Look around you." },
-    { word: "ARRIVE", meaning: "Varmak", hint: "To reach.", example: "The bus will arrive soon." },
-    { word: "ART", meaning: "Sanat", hint: "Creative work.", example: "She loves art." },
-    { word: "ARTICLE", meaning: "Makale", hint: "Written piece.", example: "Read this article." },
-    { word: "ARTIST", meaning: "Sanatçı", hint: "Creative person.", example: "He is a great artist." },
-    { word: "ASK", meaning: "Sormak", hint: "To question.", example: "Ask me anything." },
-    { word: "ASSISTANT", meaning: "Asistan", hint: "Helper.", example: "She is my assistant." },
-    { word: "AT", meaning: "-de/-da", hint: "Specific place.", example: "At the bus stop." },
-    { word: "ATTACK", meaning: "Saldırı", hint: "Violent act.", example: "Don't attack me." },
-    { word: "ATTENTION", meaning: "Dikkat", hint: "Notice/Care.", example: "Pay attention!" },
-    { word: "AUGUST", meaning: "Ağustos", hint: "8th month.", example: "It is hot in August." },
-    { word: "AUNT", meaning: "Hala/Teyze", hint: "Parent's sister.", example: "My aunt is kind." },
-    { word: "AUTUMN", meaning: "Sonbahar", hint: "Fall season.", example: "Leaves fall in autumn." },
-    { word: "AWAY", meaning: "Uzak", hint: "Not here.", example: "Go away!" },
-    { word: "BABY", meaning: "Bebek", hint: "Very young child.", example: "The baby is sleeping." },
-    { word: "BACK", meaning: "Geri", hint: "Rear/Return.", example: "Come back soon." },
-    { word: "BAD", meaning: "Kötü", hint: "Not good.", example: "That's a bad idea." },
-    { word: "BAG", meaning: "Çanta", hint: "Container.", example: "Carry your bag." },
-    { word: "BALL", meaning: "Top", hint: "Round object.", example: "Kick the ball." },
-    { word: "BANANA", meaning: "Muz", hint: "Yellow fruit.", example: "I like bananas." },
-    { word: "BAND", meaning: "Grup", hint: "Music group.", example: "The band is playing." },
-    { word: "BANK", meaning: "Banka", hint: "Money place.", example: "Go to the bank." },
-    { word: "BATH", meaning: "Banyo", hint: "Washing body.", example: "Take a bath." },
-    { word: "BEACH", meaning: "Plaj", hint: "Sandy shore.", example: "Let's go to the beach." },
-    { word: "BEAUTIFUL", meaning: "Güzel", hint: "Pretty/Lovely.", example: "What a beautiful day." },
-    { word: "BECAUSE", meaning: "Çünkü", hint: "For the reason.", example: "Because I'm happy." },
-    { word: "BECOME", meaning: "Olmak", hint: "To start to be.", example: "She became a doctor." },
-    { word: "BED", meaning: "Yatak", hint: "Sleeping place.", example: "Go to bed." },
-    { word: "BEFORE", meaning: "Önce", hint: "Earlier than.", example: "Wash hands before eating." },
-    { word: "BEGIN", meaning: "Başlamak", hint: "To start.", example: "Let the game begin." },
-    { word: "BEHIND", meaning: "Arkasında", hint: "At the back.", example: "Look behind you." },
-    { word: "BELIEVE", meaning: "İnanmak", hint: "Think it's true.", example: "I believe you." },
-    { word: "BELOW", meaning: "Altında", hint: "Lower than.", example: "It's below the table." },
-    { word: "BEST", meaning: "En iyi", hint: "Top quality.", example: "You are my best friend." },
-    { word: "BETTER", meaning: "Daha iyi", hint: "More good.", example: "I feel better now." },
-    { word: "BETWEEN", meaning: "Arasında", hint: "In middle of two.", example: "Between you and me." },
-    { word: "BIG", meaning: "Büyük", hint: "Large size.", example: "A big house." },
-    { word: "BIKE", meaning: "Bisiklet", hint: "Two-wheel vehicle.", example: "Ride your bike." },
-    { word: "BILL", meaning: "Fatura", hint: "Money owed.", example: "Pay the phone bill." },
-    { word: "BIRD", meaning: "Kuş", hint: "Flying animal.", example: "The bird is singing." },
-    { word: "BIRTHDAY", meaning: "Doğum günü", hint: "Day of birth.", example: "Happy Birthday!" },
-    { word: "BLACK", meaning: "Siyah", hint: "Darkest color.", example: "A black cat." },
-    { word: "BLOCK", meaning: "Blok/Engel", hint: "Square piece.", example: "A block of ice." },
-    { word: "BLOOD", meaning: "Kan", hint: "Red body liquid.", example: "Blood is red." },
-    { word: "BLUE", meaning: "Mavi", hint: "Color of sky.", example: "The sea is blue." },
-    { word: "BOARD", meaning: "Tahta", hint: "Flat surface.", example: "Write on the board." },
-    { word: "BOAT", meaning: "Tekne", hint: "Water vehicle.", example: "Sail the boat." },
-    { word: "BODY", meaning: "Vücut", hint: "Physical frame.", example: "Health is for the body." },
-    { word: "BOOK", meaning: "Kitap", hint: "Printed pages.", example: "Read a book." },
-    { word: "BOOT", meaning: "Bot", hint: "Heavy shoe.", example: "Wear your boots." },
-    { word: "BORING", meaning: "Sıkıcı", hint: "Not interesting.", example: "This movie is boring." },
-    { word: "BORN", meaning: "Doğmuş", hint: "To be brought to life.", example: "I was born in 1990." },
-    { word: "BOTH", meaning: "İkisi de", hint: "Two together.", example: "Both of them." },
-    { word: "BOTTLE", meaning: "Şişe", hint: "Glass container.", example: "A bottle of water." },
-    { word: "BOTTOM", meaning: "Alt/Dip", hint: "Lowest part.", example: "At the bottom of the sea." },
-    { word: "BOX", meaning: "Kutu", hint: "Square container.", example: "Put it in the box." },
-    { word: "BOY", meaning: "Erkek çocuk", hint: "Male child.", example: "The boy is playing." },
-    { word: "BREAD", meaning: "Ekmek", hint: "Baked food.", example: "Fresh bread." },
-    { word: "BREAK", meaning: "Kırmak/Mola", hint: "Separate into pieces.", example: "Don't break it." },
-    { word: "BREAKFAST", meaning: "Kahvaltı", hint: "Morning meal.", example: "Eat your breakfast." },
-    { word: "BRIDGE", meaning: "Köprü", hint: "Road over water.", example: "Cross the bridge." },
-    { word: "BRIGHT", meaning: "Parlak", hint: "Full of light.", example: "Bright stars." },
-    { word: "BRING", meaning: "Getirmek", hint: "Carry to here.", example: "Bring me water." },
-    { word: "BROTHER", meaning: "Erkek kardeş", hint: "Male sibling.", example: "My brother is tall." },
-    { word: "BROWN", meaning: "Kahverengi", hint: "Color of earth.", example: "Brown eyes." },
-    { word: "BUILD", meaning: "İnşa etmek", hint: "To make building.", example: "Build a house." },
-    { word: "BUILDING", meaning: "Bina", hint: "Structure.", example: "A tall building." },
-    { word: "BUS", meaning: "Otobüs", hint: "Large vehicle.", example: "Take the bus." },
-    { word: "BUSINESS", meaning: "İş", hint: "Trade/Work.", example: "It's my business." },
-    { word: "BUSY", meaning: "Meşgul", hint: "Many things to do.", example: "I am very busy." },
-    { word: "BUT", meaning: "Ama", hint: "However.", example: "Small but strong." },
-    { word: "BUTTER", meaning: "Tereyağı", hint: "Yellow fat food.", example: "Bread and butter." },
-    { word: "BUY", meaning: "Satın almak", hint: "Pay for something.", example: "Buy a gift." },
-    { word: "BY", meaning: "Yanında/İle", hint: "Near or using.", example: "By the window." },
-    // ... Liste bu mantıkla 500 kelimeye tamamlanmıştır (C-Z Arası)
-  ],
-  A2: [], B1: [], B2: [], C1: [], C2: []
+import React, { useState, useEffect, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { VOCABULARY_DB } from "./words";
+import { db } from "./firebase"; 
+import { doc, setDoc, getDoc } from "firebase/firestore";
+
+const App = () => {
+  const levels = ["A1", "A2", "B1", "B2", "C1", "C2"];
+  const [levelIndex, setLevelIndex] = useState(0);
+  const [wordIndex, setWordIndex] = useState(0);
+  const [score, setScore] = useState(0);
+  const [mistakes, setMistakes] = useState([]);
+  const [knownWordsInLevel, setKnownWordsInLevel] = useState(0);
+  const [showMistakeList, setShowMistakeList] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
+  const [direction, setDirection] = useState(0);
+  const [isListening, setIsListening] = useState(false);
+  const [isCorrectSpeech, setIsCorrectSpeech] = useState(false);
+
+  const currentLevel = levels[levelIndex];
+  const levelWords = useMemo(() => VOCABULARY_DB[currentLevel] || [], [currentLevel]);
+  const currentData = levelWords[wordIndex];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const docRef = doc(db, "users", "umut_user");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const d = docSnap.data();
+          setScore(d.score || 0);
+          setMistakes(d.mistakes || []);
+          setLevelIndex(d.levelIndex || 0);
+          setKnownWordsInLevel(d.knownWordsInLevel || 0);
+        }
+      } catch (e) { console.log("Bulut verisi hazır."); }
+    };
+    fetchData();
+  }, []);
+
+  const sync = (s, m, l, k) => {
+    setDoc(doc(db, "users", "umut_user"), {
+      score: s, mistakes: m, levelIndex: l, knownWordsInLevel: k, lastUpdate: new Date()
+    });
+  };
+
+  const speakWord = (text) => {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-US";
+    window.speechSynthesis.speak(u);
+  };
+
+  const listen = () => {
+    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRec) return;
+    const rec = new SpeechRec();
+    rec.lang = "en-US";
+    rec.start();
+    setIsListening(true);
+    rec.onresult = (e) => {
+      const res = e.results[0][0].transcript.toUpperCase();
+      setIsListening(false);
+      if (currentData && res.includes(currentData.word.toUpperCase())) {
+        setIsCorrectSpeech(true);
+        setTimeout(() => setIsCorrectSpeech(false), 1500);
+      }
+    };
+    rec.onerror = () => setIsListening(false);
+    rec.onend = () => setIsListening(false);
+  };
+
+  const handleAction = (known) => {
+    let nScore = score, nKnown = knownWordsInLevel, nMistakes = [...mistakes];
+    if (known) { nScore += 10; nKnown += 1; }
+    else if (!mistakes.find(m => m.word === currentData.word)) {
+      nMistakes.push({ word: currentData.word, meaning: currentData.meaning });
+    }
+
+    setScore(nScore); setKnownWordsInLevel(nKnown); setMistakes(nMistakes);
+    setDirection(known ? 1000 : -1000);
+    sync(nScore, nMistakes, levelIndex, nKnown);
+
+    setTimeout(() => {
+      setDirection(0);
+      setShowDetails(false);
+      if (wordIndex + 1 < levelWords.length) {
+        setWordIndex(prev => prev + 1);
+      } else {
+        if (nKnown === levelWords.length) {
+          alert("Level Bitti!");
+          setLevelIndex(prev => prev + 1); setWordIndex(0); setKnownWordsInLevel(0);
+        } else {
+          setWordIndex(0); setKnownWordsInLevel(0);
+        }
+      }
+    }, 300);
+  };
+
+  if (!currentData) return <div style={s.loader}>Yükleniyor...</div>;
+
+  return (
+    <div style={s.container}>
+      <div style={s.header}>
+        <div style={{fontSize: 18, fontWeight: "bold"}}>{currentLevel} • {score} XP</div>
+        <div style={{opacity: 0.8}}>{knownWordsInLevel} / {levelWords.length}</div>
+      </div>
+      
+      <button onClick={() => setShowMistakeList(true)} style={s.mistakeBtn}>LİSTEM ({mistakes.length})</button>
+
+      <div style={s.cardWrapper}>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentData.word}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            onDragEnd={(e, info) => {
+              if (info.offset.x > 100) handleAction(true);
+              else if (info.offset.x < -100) handleAction(false);
+            }}
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1, x: 0 }}
+            exit={{ x: direction, opacity: 0 }}
+            style={s.card}
+            onClick={() => { 
+              if(!showDetails) { setShowDetails(true); speakWord(currentData.word); listen(); }
+              else { speakWord(currentData.word); }
+            }}
+          >
+            {isCorrectSpeech && <div style={s.tick}>✔</div>}
+            <h1 style={s.word}>{currentData.word}</h1>
+            
+            {showDetails && (
+              <motion.div initial={{opacity:0}} animate={{opacity:1}} style={s.details}>
+                <h2 style={{color: "#22c55e", margin: "5px 0"}}>{currentData.meaning}</h2>
+                <p style={s.hintText}>{currentData.hint}</p>
+                
+                {/* ÖRNEK CÜMLE BÖLÜMÜ (Senin verindeki 'example' alanı) */}
+                <div style={s.sentenceBox}>
+                   <p style={s.sentenceEn}>"{currentData.example}"</p>
+                </div>
+                
+                {isListening && <p style={s.listeningTag}>DİNLİYORUM...</p>}
+              </motion.div>
+            )}
+            {!showDetails && <p style={s.tapHint}>TIKLA & KONUŞ • KAYDIR</p>}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      <div style={s.footer}>
+        <button onClick={() => handleAction(false)} style={s.btn("#ef4444")}>BİLMİYORUM</button>
+        <button onClick={() => handleAction(true)} style={s.btn("#22c55e")}>BİLİYORUM</button>
+      </div>
+
+      {showMistakeList && (
+        <div style={s.modal} onClick={() => setShowMistakeList(false)}>
+          <div style={s.modalContent} onClick={e => e.stopPropagation()}>
+            <h3>Yanlışlarım</h3>
+            {mistakes.map((m, i) => <div key={i} style={s.mItem}>{m.word}: {m.meaning}</div>)}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
+
+const s = {
+  container: { height: "100vh", background: "#0f172a", color: "white", display: "flex", flexDirection: "column", alignItems: "center", padding: "10px 20px", fontFamily: "sans-serif", overflow: "hidden" },
+  header: { width: "100%", maxWidth: 400, display: "flex", justifyContent: "space-between", padding: "20px 0" },
+  mistakeBtn: { background: "rgba(251, 191, 36, 0.1)", border: "1px solid #fbbf24", color: "#fbbf24", padding: "8px 20px", borderRadius: 25, fontSize: 12 },
+  cardWrapper: { flex: 1, display: "flex", alignItems: "center", width: "100%", maxWidth: 380 },
+  card: { width: "100%", background: "#1e293b", padding: "40px 30px", borderRadius: 35, textAlign: "center", border: "1px solid #334155", position: "relative" },
+  word: { fontSize: 48, margin: 0, fontWeight: "800" },
+  tick: { position: "absolute", top: 15, right: 20, color: "#22c55e", fontSize: 40 },
+  tapHint: { fontSize: 12, color: "#38bdf8", opacity: 0.6, marginTop: 40 },
+  details: { marginTop: 20 },
+  hintText: { color: "#94a3b8", fontSize: 14, fontStyle: "italic" },
+  sentenceBox: { marginTop: 20, padding: 15, background: "rgba(15, 23, 42, 0.5)", borderRadius: 15 },
+  sentenceEn: { color: "#f8fafc", fontSize: 15, margin: 0, fontWeight: "500", fontStyle: "italic" },
+  listeningTag: { color: "#fbbf24", fontSize: 12, fontWeight: "bold", marginTop: 15 },
+  footer: { display: "flex", gap: 15, width: "100%", maxWidth: 400, marginBottom: 30 },
+  btn: (c) => ({ flex: 1, padding: 20, borderRadius: 18, border: `2px solid ${c}`, color: c, background: "none", fontWeight: "bold" }),
+  modal: { position: "fixed", top: 0, left: 0, width: "100%", height: "100%", background: "rgba(0,0,0,0.85)", zIndex: 100, display: "flex", justifyContent: "center", alignItems: "center" },
+  modalContent: { background: "#1e293b", padding: 30, borderRadius: 25, width: "85%", maxHeight: "60vh", overflowY: "auto" },
+  mItem: { padding: "10px 0", borderBottom: "1px solid #334155" },
+  loader: { height: "100vh", background: "#0f172a", display: "flex", justifyContent: "center", alignItems: "center" }
+};
+
+export default App;
