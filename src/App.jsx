@@ -8,7 +8,7 @@ const App = () => {
   const [wordIndex, setWordIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [mistakes, setMistakes] = useState([]); 
-  const [knownWordsInLevel, setKnownWordsInLevel] = useState(0); // Bu seviyede kaç tane "Biliyorum" dendi?
+  const [knownWordsInLevel, setKnownWordsInLevel] = useState(0); 
   const [showMistakeList, setShowMistakeList] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [isCorrectSpeech, setIsCorrectSpeech] = useState(false); 
@@ -19,6 +19,7 @@ const App = () => {
   const levelWords = useMemo(() => VOCABULARY_DB[currentLevel] || [], [currentLevel]);
   const currentData = levelWords[wordIndex];
 
+  // SESLİ OKUMA
   const speakWord = (text) => {
     if (!text) return;
     window.speechSynthesis.cancel();
@@ -27,6 +28,7 @@ const App = () => {
     window.speechSynthesis.speak(utterance);
   };
 
+  // SESLİ DİNLEME (BU KISIM KESİNLİKLE AKTİF)
   const listen = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) return;
@@ -37,7 +39,8 @@ const App = () => {
     recognition.onresult = (event) => {
       const result = event.results[0][0].transcript.toUpperCase();
       setIsListening(false);
-      if (currentData && result.includes(currentData.word)) {
+      // Doğruysa onay tiki çıkar
+      if (currentData && result.includes(currentData.word.toUpperCase())) {
         setIsCorrectSpeech(true);
         setTimeout(() => setIsCorrectSpeech(false), 2000); 
       }
@@ -62,25 +65,22 @@ const App = () => {
       setShowDetails(false);
       setIsCorrectSpeech(false);
       
-      // KURAL: Eğer bu seviyedeki tüm kelimeleri "Biliyorum" demediysen seviye bitemez!
       if (wordIndex + 1 < levelWords.length) {
         setWordIndex(prev => prev + 1);
       } else {
-        // Liste sonuna geldik, kontrol et: Hepsi bilindi mi?
-        if (knownWordsInLevel + (known ? 1 : 0) === levelWords.length) {
+        // LİSTE SONU KONTROLÜ
+        const finalKnownCount = knownWordsInLevel + (known ? 1 : 0);
+        if (finalKnownCount === levelWords.length) {
           if (levelIndex + 1 < levels.length) {
-            alert(`Tebrikler! ${currentLevel} bitti. Tüm kelimeleri öğrendin, bir sonraki seviyeye geçiyorsun.`);
+            alert(`Tebrikler! ${currentLevel} bitti. Hepsi öğrenildi.`);
             setLevelIndex(prev => prev + 1);
             setWordIndex(0);
             setKnownWordsInLevel(0);
-          } else {
-            alert("Muhteşem! Oxford listesinin tamamını (A1-C2) bitirdin!");
           }
         } else {
-          // Eksik var, listeyi başa sar (sadece bilinmeyenler için döngü devam eder)
-          alert(`Bu seviyeyi bitirmek için tüm kelimeleri 'Biliyorum' tarafına atmalısın. Başa dönülüyor...`);
+          alert(`Eksik kelimeler var! Tümünü 'Biliyorum' yapana kadar bu seviyeden çıkış yok. Başa dönülüyor.`);
           setWordIndex(0);
-          // Burada bilinen kelimeleri istersen listeden çıkartacak bir filtre de ekleyebiliriz.
+          setKnownWordsInLevel(0); // Bu seviyeyi temizleyip tekrar hepsini bilmeni istiyoruz
         }
       }
     }, 300);
@@ -92,7 +92,7 @@ const App = () => {
     <div style={s.container}>
       <div style={s.header}>
         <div style={s.stats}>{currentLevel} • {score} XP</div>
-        <div style={s.levelProgress}>Tamamlanan: {knownWordsInLevel} / {levelWords.length}</div>
+        <div style={s.levelProgress}>TAMAMLANAN: {knownWordsInLevel} / {levelWords.length}</div>
       </div>
 
       <button onClick={() => setShowMistakeList(true)} style={s.mistakeBtn}>
@@ -115,26 +115,32 @@ const App = () => {
             style={s.card}
             onClick={() => { setShowDetails(true); speakWord(currentData.word); listen(); }}
           >
-            {isCorrectSpeech && <motion.div initial={{ scale: 0 }} animate={{ scale: 1.2 }} style={s.successBadge}>✔</motion.div>}
+            {/* ONAY TİKİ */}
+            {isCorrectSpeech && (
+              <motion.div initial={{ scale: 0 }} animate={{ scale: 1.2 }} style={s.successBadge}>✔</motion.div>
+            )}
+
             <h1 style={s.word}>{currentData.word}</h1>
+            
             {showDetails && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={s.details}>
                 <div style={s.meaning}>{currentData.meaning.toUpperCase()}</div>
                 <p style={s.definition}>{currentData.hint}</p>
+                {isListening && <div style={s.listening}>SİZİ DİNLİYORUM...</div>}
               </motion.div>
             )}
-            {!showDetails && <p style={s.tapHint}>TIKLA VE KONUŞ</p>}
+            {!showDetails && <p style={s.tapHint}>TIKLA, DİNLE VE KONUŞ</p>}
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* Çalışma Listesi Modalı */}
+      {/* ÇALIŞMA LİSTESİ MODALI */}
       <AnimatePresence>
         {showMistakeList && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={s.modalOverlay}>
             <div style={s.modalContent}>
               <div style={s.modalHeader}>
-                <h3>Bilemediğim Kelimeler</h3>
+                <h3 style={{margin:0}}>Çalışılacaklar</h3>
                 <button onClick={() => setShowMistakeList(false)} style={s.closeBtn}>✕</button>
               </div>
               <div style={s.scrollArea}>
@@ -159,22 +165,23 @@ const s = {
   container: { height: "100vh", backgroundColor: "#0f172a", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", fontFamily: "Inter, sans-serif", color: "#f8fafc", padding: "10px", overflow: "hidden" },
   header: { width: "100%", padding: "10px", display: "flex", justifyContent: "space-between", background: "#1e293b", borderRadius: "10px" },
   stats: { fontSize: "14px", fontWeight: "bold", color: "#38bdf8" },
-  levelProgress: { fontSize: "12px", color: "#94a3b8" },
-  mistakeBtn: { marginTop: "10px", background: "transparent", color: "#fbbf24", border: "1px solid #fbbf24", padding: "8px 15px", borderRadius: "20px", fontSize: "11px", fontWeight: "bold" },
-  cardWrapper: { width: "100%", maxWidth: "340px", height: "50vh", display: "flex", alignItems: "center" },
-  card: { width: "100%", minHeight: "280px", background: "#1e293b", borderRadius: "20px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "20px", border: "1px solid #334155", textAlign: "center", position: "relative" },
-  successBadge: { position: "absolute", color: "#22c55e", fontSize: "80px", top: "15%" },
-  word: { fontSize: "32px", letterSpacing: "2px" },
-  tapHint: { fontSize: "10px", color: "#38bdf8", opacity: 0.6 },
+  levelProgress: { fontSize: "11px", color: "#94a3b8", alignSelf: "center" },
+  mistakeBtn: { marginTop: "10px", background: "transparent", color: "#fbbf24", border: "1px solid #fbbf24", padding: "6px 12px", borderRadius: "20px", fontSize: "10px", fontWeight: "bold" },
+  cardWrapper: { width: "100%", maxWidth: "340px", height: "55vh", display: "flex", alignItems: "center" },
+  card: { width: "100%", minHeight: "300px", background: "#1e293b", borderRadius: "20px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "20px", border: "1px solid #334155", textAlign: "center", position: "relative" },
+  successBadge: { position: "absolute", color: "#22c55e", fontSize: "80px", zIndex: 10, pointerEvents: "none", top: "15%" },
+  word: { fontSize: "clamp(26px, 6vw, 36px)", letterSpacing: "2px" },
+  tapHint: { fontSize: "10px", color: "#38bdf8", opacity: 0.6, marginTop: "10px" },
   details: { marginTop: "10px" },
-  meaning: { color: "#22c55e", fontWeight: "bold" },
+  meaning: { color: "#22c55e", fontWeight: "bold", fontSize: "16px" },
   definition: { color: "#94a3b8", fontSize: "12px", marginTop: "5px" },
-  modalOverlay: { position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "rgba(0,0,0,0.9)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" },
-  modalContent: { background: "#1e293b", width: "100%", borderRadius: "15px", padding: "20px", maxHeight: "80vh", display: "flex", flexDirection: "column" },
-  modalHeader: { display: "flex", justifyContent: "space-between", marginBottom: "10px", borderBottom: "1px solid #334155", paddingBottom: "10px" },
+  listening: { marginTop: "8px", color: "#fbbf24", fontSize: "10px", fontWeight: "bold" },
+  modalOverlay: { position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "rgba(0,0,0,0.85)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" },
+  modalContent: { background: "#1e293b", width: "100%", borderRadius: "15px", padding: "20px", maxHeight: "70vh", display: "flex", flexDirection: "column" },
+  modalHeader: { display: "flex", justifyContent: "space-between", borderBottom: "1px solid #334155", paddingBottom: "10px", marginBottom: "10px" },
   closeBtn: { background: "none", border: "none", color: "#ef4444", fontSize: "20px" },
   scrollArea: { overflowY: "auto", flex: 1 },
-  mistakeItem: { padding: "10px", borderBottom: "1px solid #0f172a", textAlign: "left" },
+  mistakeItem: { padding: "10px", borderBottom: "1px solid #0f172a", textAlign: "left", fontSize: "14px" },
   footer: { display: "flex", gap: "10px", marginBottom: "20px", width: "100%", maxWidth: "340px" },
   btn: (clr) => ({ flex: 1, padding: "14px", borderRadius: "10px", border: `2px solid ${clr}`, color: clr, background: "transparent", fontWeight: "bold" })
 };
