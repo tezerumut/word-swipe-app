@@ -1,112 +1,135 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { OXFORD_DATA } from "./words"; // words.js'den veriyi çeker
 
-// TEST KELİMELERİ (Burayı sonra 5000 kelimeye bağlayacağız)
-const KELIMELER = [
-  { id: 1, eng: "Opportunity", tr: "Fırsat", ph: "/ˌɒp.əˈtjuː.nə.ti/" },
-  { id: 2, eng: "Success", tr: "Başarı", ph: "/səkˈses/" },
-  { id: 3, eng: "Constant", tr: "Sürekli", ph: "/ˈkɒn.stənt/" },
-  { id: 4, eng: "Improve", tr: "Geliştirmek", ph: "/ɪmˈpruːv/" },
-  { id: 5, eng: "Challenge", tr: "Zorluk/Mücadele", ph: "/ˈtʃæl.ɪndʒ/" }
-];
-
-export default function App() {
+export default function WordMasterApp() {
+  const [user, setUser] = useState(localStorage.getItem("username") || "");
+  const [pool, setPool] = useState(() => {
+    const saved = localStorage.getItem("pool");
+    return saved ? JSON.parse(saved) : OXFORD_DATA;
+  });
+  const [points, setPoints] = useState(() => parseInt(localStorage.getItem("points")) || 0);
+  const [view, setView] = useState("learn");
   const [index, setIndex] = useState(0);
-  const [showTr, setShowTr] = useState(false);
-  const [learnedCount, setLearnedCount] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+  const [shake, setShake] = useState(false);
 
-  // Sesli Telaffuz
-  const speak = (text) => {
-    const utterance = new window.SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';
-    utterance.rate = 0.8; // Biraz yavaş ve net konuşsun
-    window.speechSynthesis.speak(utterance);
-  };
+  useEffect(() => {
+    localStorage.setItem("points", points);
+    localStorage.setItem("pool", JSON.stringify(pool));
+  }, [points, pool]);
 
-  const handleSwipe = (direction) => {
-    if (direction === "right") {
-      setLearnedCount(prev => prev + 1); // Biliyorum sayacı
+  const handleAction = (isCorrect) => {
+    if (isCorrect) {
+      const newPool = pool.filter((_, i) => i !== index);
+      setPool(newPool);
+      setPoints(p => p + 10);
+      if (index >= newPool.length) setIndex(0);
+      setFlipped(false);
+    } else {
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
+      setIndex((index + 1) % pool.length);
+      setFlipped(false);
     }
-    setShowTr(false);
-    setIndex(prev => prev + 1);
   };
 
-  if (index >= KELIMELER.length) {
+  if (!user) {
     return (
-      <div style={centerStyle}>
-        <h2>🏆 Harika!</h2>
-        <p>Bu seti bitirdin. Toplam {learnedCount} kelime öğrendin.</p>
-        <button onClick={() => setIndex(0)} style={refreshBtn}>Baştan Başla</button>
+      <div style={styles.container}>
+        <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} style={styles.card}>
+          <img 
+            src="/logo.png" 
+            alt="Logo" 
+            style={styles.logo} 
+            onError={(e) => e.target.style.display = 'none'} 
+          />
+          <h1 style={{fontSize:'26px', color:'#2d3436', margin:'10px 0'}}>Kelime Avcısı</h1>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            const name = e.target.username.value;
+            setUser(name);
+            localStorage.setItem("username", name);
+          }} style={{display:'flex', flexDirection:'column', gap:'12px', width:'100%'}}>
+            <input name="username" placeholder="İsminizi yazın..." required style={styles.input} />
+            <button type="submit" style={styles.loginBtn}>Öğrenmeye Başla</button>
+          </form>
+        </motion.div>
       </div>
     );
   }
 
-  const currentWord = KELIMELER[index];
+  const current = pool[index];
+  const progress = OXFORD_DATA.length > 0 ? ((OXFORD_DATA.length - pool.length) / OXFORD_DATA.length) * 100 : 0;
 
   return (
-    <div style={containerStyle}>
-      {/* İlerleme Çubuğu */}
-      <div style={progressContainer}>
-        <div style={{...progressFill, width: `${(index / KELIMELER.length) * 100}%`}}></div>
+    <div style={styles.container}>
+      <div style={styles.topBar}>
+        <span style={styles.badge}>👤 {user}</span>
+        <span style={{...styles.badge, background:'#f1c40f', color:'#000'}}>💰 {points}</span>
+        <button onClick={() => {localStorage.clear(); window.location.reload();}} style={styles.resetBtn}>✕ Sıfırla</button>
       </div>
 
-      <div style={headerStyle}>WordSwipe <span style={{color:'#3b82f6'}}>EN-TR</span></div>
-      
+      <div style={styles.progressContainer}>
+        <div style={{...styles.progressBar, width: `${progress}%`}}></div>
+      </div>
+
       <AnimatePresence mode="wait">
-        <motion.div
-          key={currentWord.id}
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          onDragEnd={(e, info) => {
-            if (info.offset.x > 100) handleSwipe("right"); // Sağa: Biliyorum
-            if (info.offset.x < -100) handleSwipe("left"); // Sola: Bilmiyorum
-          }}
-          initial={{ scale: 0.8, opacity: 0, rotate: -5 }}
-          animate={{ scale: 1, opacity: 1, rotate: 0 }}
-          exit={{ 
-            x: index % 2 === 0 ? 500 : -500, 
-            opacity: 0,
-            rotate: index % 2 === 0 ? 45 : -45
-          }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          style={cardStyle}
-        >
-          <div style={badge}>{index + 1} / {KELIMELER.length}</div>
-          
-          <div style={{fontSize: '42px', fontWeight: '900', color: '#1e293b'}}>{currentWord.eng}</div>
-          <div style={{fontSize: '16px', color: '#94a3b8', margin: '5px 0', fontFamily: 'monospace'}}>{currentWord.ph}</div>
-          
-          <button onClick={() => speak(currentWord.eng)} style={soundBtn}>🔊 Dinle</button>
-          
-          <div onClick={() => setShowTr(!showTr)} style={trBox}>
-            {showTr ? (
-              <motion.div initial={{y:10}} animate={{y:0}} style={{color: '#10b981', fontWeight:'800'}}>
-                {currentWord.tr}
-              </motion.div>
+        {pool.length > 0 ? (
+          <motion.div 
+            key={pool.length + index}
+            animate={shake ? { x: [-10, 10, -10, 10, 0] } : { x: 0 }}
+            style={styles.card}
+          >
+            {view === "learn" ? (
+              <div onClick={() => setFlipped(!flipped)} style={{cursor:'pointer'}}>
+                {!flipped ? <h1 style={{fontSize:'40px'}}>{current.eng}</h1> : <h2>{current.tr}</h2>}
+                <p style={{fontSize:'12px', color:'#ccc', marginTop:'20px'}}>Çevirmek için tıkla</p>
+              </div>
             ) : (
-              <span style={{color:'#94a3b8', fontSize:'14px'}}>Türkçesini görmek için tıkla</span>
+              <div style={{width:'100%'}}>
+                <p style={{fontWeight:'bold', marginBottom:'20px'}}>{current.ex}</p>
+                <div style={styles.quizGrid}>
+                  {current.opts.map((o, i) => (
+                    <button key={i} onClick={() => handleAction(o.toLowerCase() === current.eng.toLowerCase())} style={styles.optBtn}>
+                      {o}
+                    </button>
+                  ))}
+                </div>
+              </div>
             )}
+          </motion.div>
+        ) : (
+          <div style={styles.card}>
+            <h2>Tebrikler! 🎉</h2>
+            <p>Tüm kelimeleri öğrendin.</p>
+            <button onClick={() => {localStorage.clear(); window.location.reload();}} style={styles.loginBtn}>Başa Dön</button>
           </div>
-        </motion.div>
+        )}
       </AnimatePresence>
 
-      <div style={footerStyle}>
-        <div style={{textAlign:'center', color:'#ef4444'}}>⬅️ BİLMİYORUM<br/><small>(Tekrar Et)</small></div>
-        <div style={{textAlign:'center', color:'#10b981'}}>BİLİYORUM ➡️<br/><small>(Öğrendim)</small></div>
+      <div style={styles.footer}>
+        <button onClick={() => setView(view === 'learn' ? 'quiz' : 'learn')} style={styles.modeBtn}>
+          {view === 'learn' ? '🎯 Quiz Modu' : '📖 Kartlar'}
+        </button>
       </div>
     </div>
   );
 }
 
-// STİLLER
-const containerStyle = { height: '100dvh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f8fafc', fontFamily: 'system-ui, sans-serif', overflow: 'hidden', position: 'relative' };
-const headerStyle = { position: 'absolute', top: '40px', fontWeight: '900', fontSize: '20px', letterSpacing:'-1px' };
-const cardStyle = { width: '85%', maxWidth: '340px', height: '480px', backgroundColor: '#fff', borderRadius: '35px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'grab', touchAction: 'none', position:'relative', border: '1px solid #f1f5f9' };
-const badge = { position:'absolute', top:'25px', right:'25px', backgroundColor:'#f1f5f9', padding:'5px 12px', borderRadius:'15px', fontSize:'12px', color:'#64748b', fontWeight:'700' };
-const soundBtn = { marginTop: '30px', padding: '15px 30px', borderRadius: '20px', border: 'none', backgroundColor: '#f1f5f9', color: '#1e293b', cursor: 'pointer', fontWeight: 'bold', fontSize:'16px', display:'flex', alignItems:'center', gap:'10px' };
-const trBox = { marginTop: '50px', minHeight:'60px', display:'flex', alignItems:'center', justifyContent:'center', padding:'0 20px', textAlign:'center', cursor: 'pointer' };
-const footerStyle = { position: 'absolute', bottom: '50px', width: '90%', display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: '900', letterSpacing:'1px' };
-const centerStyle = { height: '100vh', display: 'flex', flexDirection:'column', alignItems: 'center', justifyContent: 'center', padding:'20px', textAlign:'center' };
-const progressContainer = { position:'absolute', top:0, left:0, width:'100%', height:'6px', backgroundColor:'#e2e8f0' };
-const progressFill = { height:'100%', backgroundColor:'#3b82f6', transition:'width 0.3s ease' };
-const refreshBtn = { marginTop:'20px', padding:'12px 25px', borderRadius:'12px', border:'none', backgroundColor:'#1e293b', color:'#fff', fontWeight:'700' };
+const styles = {
+  container: { height: '100vh', background: '#1e272e', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: 'sans-serif' },
+  card: { background: 'white', padding: '30px', borderRadius: '30px', width: '320px', textAlign: 'center', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' },
+  logo: { width: '80px', height: '80px', borderRadius: '15px', marginBottom: '15px', objectFit: 'cover' },
+  topBar: { position: 'absolute', top: 20, display: 'flex', gap: '10px' },
+  badge: { background: '#34495e', color: 'white', padding: '5px 15px', borderRadius: '15px', fontSize: '13px' },
+  resetBtn: { background: '#ff7675', color: 'white', border: 'none', borderRadius: '10px', padding: '5px 10px', cursor: 'pointer' },
+  progressContainer: { width: '280px', height: '10px', background: '#34495e', borderRadius: '5px', marginBottom: '20px' },
+  progressBar: { height: '100%', background: '#55efc4', borderRadius: '5px', transition: '0.4s' },
+  input: { padding: '12px', borderRadius: '10px', border: '1px solid #ddd', fontSize: '16px' },
+  loginBtn: { padding: '12px', background: '#55efc4', border: 'none', borderRadius: '10px', fontWeight: 'bold', cursor: 'pointer' },
+  quizGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' },
+  optBtn: { padding: '12px', background: '#f5f6fa', border: '1px solid #ddd', borderRadius: '10px', cursor: 'pointer' },
+  footer: { marginTop: '20px' },
+  modeBtn: { padding: '10px 25px', background: '#0984e3', color: 'white', border: 'none', borderRadius: '20px', fontWeight: 'bold', cursor: 'pointer' }
+};
