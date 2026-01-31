@@ -2,7 +2,7 @@ export const VOCABULARY_DB = {
   A1: [
     { 
       word: "ABANDON", 
-      meaning: "Terk etmek, bırakmak",
+      meaning: "Terk etmek",
       hint: "To leave a place, thing, or person forever.", 
       example: "The biological father of the child abandoned the family.",
       level: "A1" 
@@ -18,7 +18,7 @@ export const VOCABULARY_DB = {
   A2: [
     { 
       word: "BENEFICIAL", 
-      meaning: "Faydalı, yararlı",
+      meaning: "Faydalı",
       hint: "Helpful, useful, or good.", 
       example: "A stay in the country will be beneficial to his health.",
       level: "A2" 
