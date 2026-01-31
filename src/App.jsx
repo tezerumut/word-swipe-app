@@ -43,7 +43,6 @@ const App = () => {
       const result = event.results[0][0].transcript.toUpperCase();
       setIsListening(false);
       
-      // KURAL: Doğru telaffuzda sadece yeşil onay tiki çıkar
       if (currentData && result.includes(currentData.word)) {
         setIsCorrectSpeech(true);
         setTimeout(() => setIsCorrectSpeech(false), 2000); 
@@ -56,7 +55,6 @@ const App = () => {
     if (known) {
       setScore(prev => prev + 10);
     } else {
-      // Bilinmeyen kelimeyi listeye ekle
       if (currentData && !mistakes.find(m => m.word === currentData.word)) {
         setMistakes(prev => [...prev, { word: currentData.word, meaning: currentData.meaning }]);
       }
@@ -72,17 +70,41 @@ const App = () => {
       if (wordIndex + 1 < levelWords.length) {
         setWordIndex(prev => prev + 1);
       } else if (levelIndex + 1 < levels.length) {
+        // Sonraki seviyeye geç
         setLevelIndex(prev => prev + 1);
         setWordIndex(0);
+      } else {
+        // TÜM KELİMELER BİTTİ
+        setWordIndex(wordIndex + 1); 
       }
     }, 300);
   };
 
-  if (!currentData) return <div style={s.container}>Yükleniyor...</div>;
+  // KELİMELER BİTTİĞİNDE GÖRÜNECEK EKRAN
+  if (!currentData) {
+    return (
+      <div style={s.container}>
+        <div style={s.card}>
+          <h2 style={{color: "#22c55e"}}>TEBRİKLER! 🎉</h2>
+          <p>Tüm kelimeleri tamamladın.</p>
+          <div style={s.stats}>TOPLAM SKOR: {score} XP</div>
+          <button onClick={() => window.location.reload()} style={s.restartBtn}>YENİDEN BAŞLA</button>
+          {mistakes.length > 0 && (
+             <button onClick={() => setShowMistakeList(true)} style={s.mistakeBtn}>
+                ÇALIŞMA LİSTEMİ GÖR ({mistakes.length})
+             </button>
+          )}
+        </div>
+        {/* Modal burada da çalışmalı */}
+        <AnimatePresence>
+          {showMistakeList && <MistakeModal mistakes={mistakes} onClose={() => setShowMistakeList(false)} />}
+        </AnimatePresence>
+      </div>
+    );
+  }
 
   return (
     <div style={s.container}>
-      {/* Header - Ses ikonları ve Skor */}
       <div style={s.header}>
         <div style={s.stats}>{currentLevel} • {score} XP</div>
         <div style={s.toggleGroup}>
@@ -91,12 +113,10 @@ const App = () => {
         </div>
       </div>
 
-      {/* Çalışma Listesi Erişimi */}
       <button onClick={() => setShowMistakeList(true)} style={s.mistakeBtn}>
         📖 ÇALIŞMA LİSTEM ({mistakes.length})
       </button>
 
-      {/* Kart Alanı */}
       <div style={s.cardWrapper}>
         <AnimatePresence mode="wait">
           <motion.div
@@ -113,13 +133,10 @@ const App = () => {
             style={s.card}
             onClick={() => { setShowDetails(true); speakWord(currentData.word); listen(); }}
           >
-            {/* Onay Tiki */}
             {isCorrectSpeech && (
               <motion.div initial={{ scale: 0 }} animate={{ scale: 1.2 }} style={s.successBadge}>✔</motion.div>
             )}
-
             <h1 style={s.word}>{currentData.word}</h1>
-            
             {showDetails && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={s.details}>
                 <div style={s.meaning}>{currentData.meaning.toUpperCase()}</div>
@@ -132,27 +149,8 @@ const App = () => {
         </AnimatePresence>
       </div>
 
-      {/* Çalışma Listesi Modalı (Hata Listesi) */}
       <AnimatePresence>
-        {showMistakeList && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={s.modalOverlay}>
-            <motion.div initial={{ y: 50 }} animate={{ y: 0 }} style={s.modalContent}>
-              <div style={s.modalHeader}>
-                <h3 style={{margin:0}}>Çalışılacak Kelimeler</h3>
-                <button onClick={() => setShowMistakeList(false)} style={s.closeBtn}>✕</button>
-              </div>
-              <div style={s.scrollArea}>
-                {mistakes.length === 0 ? <p style={{color:"#94a3b8", textAlign:"center"}}>Liste boş.</p> : 
-                  mistakes.map((m, i) => (
-                    <div key={i} style={s.mistakeItem}>
-                      <strong>{m.word}</strong>: {m.meaning}
-                    </div>
-                  ))
-                }
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
+        {showMistakeList && <MistakeModal mistakes={mistakes} onClose={() => setShowMistakeList(false)} />}
       </AnimatePresence>
 
       <div style={s.footer}>
@@ -163,15 +161,37 @@ const App = () => {
   );
 };
 
+// Alt Bileşen: Hata Listesi Modalı
+const MistakeModal = ({ mistakes, onClose }) => (
+  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={s.modalOverlay}>
+    <motion.div initial={{ y: 50 }} animate={{ y: 0 }} style={s.modalContent}>
+      <div style={s.modalHeader}>
+        <h3 style={{margin:0}}>Çalışılacak Kelimeler</h3>
+        <button onClick={onClose} style={s.closeBtn}>✕</button>
+      </div>
+      <div style={s.scrollArea}>
+        {mistakes.length === 0 ? <p style={{color:"#94a3b8", textAlign:"center"}}>Liste boş.</p> : 
+          mistakes.map((m, i) => (
+            <div key={i} style={s.mistakeItem}>
+              <strong>{m.word}</strong>: {m.meaning}
+            </div>
+          ))
+        }
+      </div>
+    </motion.div>
+  </motion.div>
+);
+
 const s = {
   container: { height: "100vh", backgroundColor: "#0f172a", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", fontFamily: "Inter, sans-serif", color: "#f8fafc", overflow: "hidden", padding: "10px" },
   header: { width: "100%", padding: "10px 15px", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#1e293b", borderRadius: "10px" },
-  stats: { fontSize: "12px", fontWeight: "bold", color: "#38bdf8" },
+  stats: { fontSize: "14px", fontWeight: "bold", color: "#38bdf8" },
   toggleGroup: { display: "flex", gap: "8px" },
   toggle: (active) => ({ width: "32px", height: "32px", borderRadius: "8px", border: "none", background: active ? "#334155" : "#7f1d1d", color: "white" }),
-  mistakeBtn: { marginTop: "10px", background: "transparent", color: "#38bdf8", border: "1px solid #38bdf8", padding: "6px 12px", borderRadius: "20px", fontSize: "10px", fontWeight: "bold" },
+  mistakeBtn: { marginTop: "10px", background: "transparent", color: "#38bdf8", border: "1px solid #38bdf8", padding: "8px 15px", borderRadius: "20px", fontSize: "11px", fontWeight: "bold" },
+  restartBtn: { marginTop: "20px", background: "#22c55e", color: "white", border: "none", padding: "10px 20px", borderRadius: "10px", fontWeight: "bold", cursor: "pointer" },
   cardWrapper: { width: "100%", maxWidth: "340px", height: "55vh", display: "flex", alignItems: "center" },
-  card: { width: "100%", minHeight: "300px", background: "#1e293b", borderRadius: "20px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "20px", border: "1px solid #334155", textAlign: "center", position: "relative" },
+  card: { width: "100%", minHeight: "300px", background: "#1e293b", borderRadius: "20px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "30px", border: "1px solid #334155", textAlign: "center", position: "relative" },
   successBadge: { position: "absolute", color: "#22c55e", fontSize: "80px", zIndex: 10, pointerEvents: "none", top: "15%" },
   word: { fontSize: "clamp(26px, 6vw, 36px)", letterSpacing: "2px" },
   tapHint: { fontSize: "10px", color: "#38bdf8", opacity: 0.6, marginTop: "10px" },
