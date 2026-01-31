@@ -1,190 +1,35 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { VOCABULARY_DB } from "./words";
-import { db } from "./firebase"; 
-import { doc, setDoc, getDoc } from "firebase/firestore";
-
-const App = () => {
-  const levels = ["A1", "A2", "B1", "B2", "C1", "C2"];
-  const [levelIndex, setLevelIndex] = useState(0);
-  const [wordIndex, setWordIndex] = useState(0);
-  const [score, setScore] = useState(0);
-  const [mistakes, setMistakes] = useState([]);
-  const [knownWordsInLevel, setKnownWordsInLevel] = useState(0);
-  const [showMistakeList, setShowMistakeList] = useState(false);
-  const [showDetails, setShowDetails] = useState(false);
-  const [direction, setDirection] = useState(0);
-  const [isListening, setIsListening] = useState(false);
-  const [isCorrectSpeech, setIsCorrectSpeech] = useState(false);
-
-  const currentLevel = levels[levelIndex];
-  const levelWords = useMemo(() => VOCABULARY_DB[currentLevel] || [], [currentLevel]);
-  const currentData = levelWords[wordIndex];
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const docRef = doc(db, "users", "umut_user");
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const d = docSnap.data();
-          setScore(d.score || 0);
-          setMistakes(d.mistakes || []);
-          setLevelIndex(d.levelIndex || 0);
-          setKnownWordsInLevel(d.knownWordsInLevel || 0);
-        }
-      } catch (e) { console.log("Bulut verisi hazır."); }
-    };
-    fetchData();
-  }, []);
-
-  const sync = (s, m, l, k) => {
-    setDoc(doc(db, "users", "umut_user"), {
-      score: s, mistakes: m, levelIndex: l, knownWordsInLevel: k, lastUpdate: new Date()
-    });
-  };
-
-  const speakWord = (text) => {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = "en-US";
-    window.speechSynthesis.speak(u);
-  };
-
-  const listen = () => {
-    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRec) return;
-    const rec = new SpeechRec();
-    rec.lang = "en-US";
-    rec.start();
-    setIsListening(true);
-    rec.onresult = (e) => {
-      const res = e.results[0][0].transcript.toUpperCase();
-      setIsListening(false);
-      if (currentData && res.includes(currentData.word.toUpperCase())) {
-        setIsCorrectSpeech(true);
-        setTimeout(() => setIsCorrectSpeech(false), 1500);
-      }
-    };
-    rec.onerror = () => setIsListening(false);
-    rec.onend = () => setIsListening(false);
-  };
-
-  const handleAction = (known) => {
-    let nScore = score, nKnown = knownWordsInLevel, nMistakes = [...mistakes];
-    if (known) { nScore += 10; nKnown += 1; }
-    else if (!mistakes.find(m => m.word === currentData.word)) {
-      nMistakes.push({ word: currentData.word, meaning: currentData.meaning });
-    }
-
-    setScore(nScore); setKnownWordsInLevel(nKnown); setMistakes(nMistakes);
-    setDirection(known ? 1000 : -1000);
-    sync(nScore, nMistakes, levelIndex, nKnown);
-
-    setTimeout(() => {
-      setDirection(0);
-      setShowDetails(false);
-      if (wordIndex + 1 < levelWords.length) {
-        setWordIndex(prev => prev + 1);
-      } else {
-        if (nKnown === levelWords.length) {
-          alert("Level Bitti!");
-          setLevelIndex(prev => prev + 1); setWordIndex(0); setKnownWordsInLevel(0);
-        } else {
-          setWordIndex(0); setKnownWordsInLevel(0);
-        }
-      }
-    }, 300);
-  };
-
-  if (!currentData) return <div style={s.loader}>Yükleniyor...</div>;
-
-  return (
-    <div style={s.container}>
-      <div style={s.header}>
-        <div style={{fontSize: 18, fontWeight: "bold"}}>{currentLevel} • {score} XP</div>
-        <div style={{opacity: 0.8}}>{knownWordsInLevel} / {levelWords.length}</div>
-      </div>
-      
-      <button onClick={() => setShowMistakeList(true)} style={s.mistakeBtn}>LİSTEM ({mistakes.length})</button>
-
-      <div style={s.cardWrapper}>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentData.word}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            onDragEnd={(e, info) => {
-              if (info.offset.x > 100) handleAction(true);
-              else if (info.offset.x < -100) handleAction(false);
-            }}
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1, x: 0 }}
-            exit={{ x: direction, opacity: 0 }}
-            style={s.card}
-            onClick={() => { 
-              if(!showDetails) { setShowDetails(true); speakWord(currentData.word); listen(); }
-              else { speakWord(currentData.word); }
-            }}
-          >
-            {isCorrectSpeech && <div style={s.tick}>✔</div>}
-            <h1 style={s.word}>{currentData.word}</h1>
-            
-            {showDetails && (
-              <motion.div initial={{opacity:0}} animate={{opacity:1}} style={s.details}>
-                <h2 style={{color: "#22c55e", margin: "5px 0"}}>{currentData.meaning}</h2>
-                <p style={s.hintText}>{currentData.hint}</p>
-                
-                {/* ÖRNEK CÜMLE BÖLÜMÜ (Senin verindeki 'example' alanı) */}
-                <div style={s.sentenceBox}>
-                   <p style={s.sentenceEn}>"{currentData.example}"</p>
-                </div>
-                
-                {isListening && <p style={s.listeningTag}>DİNLİYORUM...</p>}
-              </motion.div>
-            )}
-            {!showDetails && <p style={s.tapHint}>TIKLA & KONUŞ • KAYDIR</p>}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      <div style={s.footer}>
-        <button onClick={() => handleAction(false)} style={s.btn("#ef4444")}>BİLMİYORUM</button>
-        <button onClick={() => handleAction(true)} style={s.btn("#22c55e")}>BİLİYORUM</button>
-      </div>
-
-      {showMistakeList && (
-        <div style={s.modal} onClick={() => setShowMistakeList(false)}>
-          <div style={s.modalContent} onClick={e => e.stopPropagation()}>
-            <h3>Yanlışlarım</h3>
-            {mistakes.map((m, i) => <div key={i} style={s.mItem}>{m.word}: {m.meaning}</div>)}
-          </div>
-        </div>
-      )}
-    </div>
-  );
+export const VOCABULARY_DB = {
+  A1: [
+    { word: "ACCENT", meaning: "Aksan", hint: "Way of speaking.", example: "He has a British accent." },
+    { word: "APPLE", meaning: "Elma", hint: "A red or green fruit.", example: "I eat an apple every day." },
+    { word: "BOOK", meaning: "Kitap", hint: "You read it.", example: "This book is very interesting." },
+    { word: "CAT", meaning: "Kedi", hint: "A small furry pet.", example: "The cat is sleeping." },
+    { word: "DOG", meaning: "Köpek", hint: "Man's best friend.", example: "My dog loves to run." },
+    { word: "EGG", meaning: "Yumurta", hint: "Chicken product.", example: "I want an egg for breakfast." },
+    { word: "FISH", meaning: "Balık", hint: "It swims in water.", example: "There are many fish in the sea." },
+    { word: "GARDEN", meaning: "Bahçe", hint: "Place with flowers.", example: "We have a small garden." },
+    { word: "HAPPY", meaning: "Mutlu", hint: "Feeling good.", example: "I am so happy today." },
+    { word: "ICE", meaning: "Buz", hint: "Frozen water.", example: "Put some ice in my drink." },
+    { word: "JACKET", meaning: "Ceket", hint: "You wear it when cold.", example: "Wear your jacket outside." },
+    { word: "KITCHEN", meaning: "Mutfak", hint: "Where you cook.", example: "Mom is in the kitchen." },
+    { word: "LAMP", meaning: "Lamba", hint: "It gives light.", example: "Turn on the lamp, please." },
+    { word: "MONEY", meaning: "Para", hint: "You use it to buy things.", example: "I don't have much money." },
+    { word: "NIGHT", meaning: "Gece", hint: "Opposite of day.", example: "The stars shine at night." },
+    { word: "ORANGE", meaning: "Portakal", hint: "A fruit and a color.", example: "I drink orange juice." },
+    { word: "PAPER", meaning: "Kağıt", hint: "You write on it.", example: "I need a piece of paper." },
+    { word: "QUICK", meaning: "Hızlı", hint: "Very fast.", example: "Be quick, we are late!" },
+    { word: "RIVER", meaning: "Nehir", hint: "Flowing water.", example: "The river is very long." },
+    { word: "SMILE", meaning: "Gülümsemek", hint: "Happy face.", example: "Always smile at people." },
+    { word: "TABLE", meaning: "Masa", hint: "Furniture for eating.", example: "The food is on the table." },
+    { word: "UNDER", meaning: "Altında", hint: "Below something.", example: "The cat is under the chair." },
+    { word: "VILLAGE", meaning: "Köy", hint: "Smaller than a city.", example: "I live in a small village." },
+    { word: "WATER", meaning: "Su", hint: "You drink it to live.", example: "Can I have some water?" },
+    { word: "YELLOW", meaning: "Sarı", hint: "Color of the sun.", example: "She has a yellow dress." },
+    { word: "ZOO", meaning: "Hayvanat Bahçesi", hint: "Place with animals.", example: "Let's go to the zoo." }
+  ],
+  A2: [],
+  B1: [],
+  B2: [],
+  C1: [],
+  C2: []
 };
-
-const s = {
-  container: { height: "100vh", background: "#0f172a", color: "white", display: "flex", flexDirection: "column", alignItems: "center", padding: "10px 20px", fontFamily: "sans-serif", overflow: "hidden" },
-  header: { width: "100%", maxWidth: 400, display: "flex", justifyContent: "space-between", padding: "20px 0" },
-  mistakeBtn: { background: "rgba(251, 191, 36, 0.1)", border: "1px solid #fbbf24", color: "#fbbf24", padding: "8px 20px", borderRadius: 25, fontSize: 12 },
-  cardWrapper: { flex: 1, display: "flex", alignItems: "center", width: "100%", maxWidth: 380 },
-  card: { width: "100%", background: "#1e293b", padding: "40px 30px", borderRadius: 35, textAlign: "center", border: "1px solid #334155", position: "relative" },
-  word: { fontSize: 48, margin: 0, fontWeight: "800" },
-  tick: { position: "absolute", top: 15, right: 20, color: "#22c55e", fontSize: 40 },
-  tapHint: { fontSize: 12, color: "#38bdf8", opacity: 0.6, marginTop: 40 },
-  details: { marginTop: 20 },
-  hintText: { color: "#94a3b8", fontSize: 14, fontStyle: "italic" },
-  sentenceBox: { marginTop: 20, padding: 15, background: "rgba(15, 23, 42, 0.5)", borderRadius: 15 },
-  sentenceEn: { color: "#f8fafc", fontSize: 15, margin: 0, fontWeight: "500", fontStyle: "italic" },
-  listeningTag: { color: "#fbbf24", fontSize: 12, fontWeight: "bold", marginTop: 15 },
-  footer: { display: "flex", gap: 15, width: "100%", maxWidth: 400, marginBottom: 30 },
-  btn: (c) => ({ flex: 1, padding: 20, borderRadius: 18, border: `2px solid ${c}`, color: c, background: "none", fontWeight: "bold" }),
-  modal: { position: "fixed", top: 0, left: 0, width: "100%", height: "100%", background: "rgba(0,0,0,0.85)", zIndex: 100, display: "flex", justifyContent: "center", alignItems: "center" },
-  modalContent: { background: "#1e293b", padding: 30, borderRadius: 25, width: "85%", maxHeight: "60vh", overflowY: "auto" },
-  mItem: { padding: "10px 0", borderBottom: "1px solid #334155" },
-  loader: { height: "100vh", background: "#0f172a", display: "flex", justifyContent: "center", alignItems: "center" }
-};
-
-export default App;
