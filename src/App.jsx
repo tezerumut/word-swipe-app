@@ -21,7 +21,6 @@ const App = () => {
   const levelWords = useMemo(() => VOCABULARY_DB[currentLevel] || [], [currentLevel]);
   const currentData = levelWords[wordIndex];
 
-  // ☁️ BULUTTAN VERİ ÇEK
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -34,19 +33,17 @@ const App = () => {
           setLevelIndex(d.levelIndex || 0);
           setKnownWordsInLevel(d.knownWordsInLevel || 0);
         }
-      } catch (e) { console.log("İlk kurulum yapılıyor..."); }
+      } catch (e) { console.log("Veri çekilemedi."); }
     };
     fetchData();
   }, []);
 
-  // ☁️ BULUTA KAYDET
   const sync = (s, m, l, k) => {
     setDoc(doc(db, "users", "umut_user"), {
       score: s, mistakes: m, levelIndex: l, knownWordsInLevel: k, lastUpdate: new Date()
     });
   };
 
-  // 🔊 SESLİ OKUMA
   const speakWord = (text) => {
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
@@ -54,7 +51,6 @@ const App = () => {
     window.speechSynthesis.speak(u);
   };
 
-  // 🎤 MİKROFON DİNLEME
   const listen = () => {
     const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRec) return;
@@ -67,10 +63,11 @@ const App = () => {
       setIsListening(false);
       if (currentData && res.includes(currentData.word.toUpperCase())) {
         setIsCorrectSpeech(true);
-        setTimeout(() => setIsCorrectSpeech(false), 2000);
+        setTimeout(() => setIsCorrectSpeech(false), 1500);
       }
     };
     rec.onerror = () => setIsListening(false);
+    rec.onend = () => setIsListening(false);
   };
 
   const handleAction = (known) => {
@@ -91,7 +88,7 @@ const App = () => {
         setWordIndex(prev => prev + 1);
       } else {
         if (nKnown === levelWords.length) {
-          alert("Seviye Tamamlandı!");
+          alert("Level Up!");
           setLevelIndex(prev => prev + 1); setWordIndex(0); setKnownWordsInLevel(0);
         } else {
           setWordIndex(0); setKnownWordsInLevel(0);
@@ -105,8 +102,8 @@ const App = () => {
   return (
     <div style={s.container}>
       <div style={s.header}>
-        <div>{currentLevel} • {score} XP</div>
-        <div>{knownWordsInLevel} / {levelWords.length}</div>
+        <div style={{fontSize: 18, fontWeight: "bold"}}>{currentLevel} • {score} XP</div>
+        <div style={{opacity: 0.8}}>{knownWordsInLevel} / {levelWords.length}</div>
       </div>
       
       <button onClick={() => setShowMistakeList(true)} style={s.mistakeBtn}>LİSTEM ({mistakes.length})</button>
@@ -126,21 +123,26 @@ const App = () => {
             exit={{ x: direction, opacity: 0 }}
             style={s.card}
             onClick={() => { 
-              setShowDetails(true); 
-              speakWord(currentData.word); 
-              listen(); 
+              if(!showDetails) { setShowDetails(true); speakWord(currentData.word); listen(); }
+              else { speakWord(currentData.word); }
             }}
           >
             {isCorrectSpeech && <div style={s.tick}>✔</div>}
             <h1 style={s.word}>{currentData.word}</h1>
+            
             {showDetails && (
-              <div style={s.details}>
-                <h2 style={{color: "#22c55e"}}>{currentData.meaning}</h2>
-                <p style={{color: "#94a3b8"}}>{currentData.hint}</p>
-                {isListening && <p style={{color: "#fbbf24", fontSize: 12, fontWeight: "bold"}}>DİNLİYORUM...</p>}
-              </div>
+              <motion.div initial={{opacity:0}} animate={{opacity:1}} style={s.details}>
+                <h2 style={{color: "#22c55e", margin: "5px 0"}}>{currentData.meaning}</h2>
+                <p style={s.hintText}>{currentData.hint}</p>
+                {/* ÖRNEK CÜMLE BÖLÜMÜ */}
+                <div style={s.sentenceBox}>
+                   <p style={s.sentenceEn}>"{currentData.sentenceEn}"</p>
+                   <p style={s.sentenceTr}>{currentData.sentenceTr}</p>
+                </div>
+                {isListening && <p style={s.listeningTag}>DİNLİYORUM...</p>}
+              </motion.div>
             )}
-            {!showDetails && <p style={s.tapHint}>TIKLA, KONUŞ VE KAYDIR</p>}
+            {!showDetails && <p style={s.tapHint}>TIKLA & KONUŞ</p>}
           </motion.div>
         </AnimatePresence>
       </div>
@@ -149,34 +151,27 @@ const App = () => {
         <button onClick={() => handleAction(false)} style={s.btn("#ef4444")}>BİLMİYORUM</button>
         <button onClick={() => handleAction(true)} style={s.btn("#22c55e")}>BİLİYORUM</button>
       </div>
-
-      {showMistakeList && (
-        <div style={s.modal} onClick={() => setShowMistakeList(false)}>
-          <div style={s.modalContent} onClick={e => e.stopPropagation()}>
-            <h3>Kelimelerim</h3>
-            {mistakes.map((m, i) => <div key={i} style={s.mItem}>{m.word}: {m.meaning}</div>)}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
 const s = {
-  container: { height: "100vh", background: "#0f172a", color: "white", display: "flex", flexDirection: "column", alignItems: "center", padding: 10, fontFamily: "sans-serif", overflow: "hidden" },
-  header: { width: "100%", display: "flex", justifyContent: "space-between", padding: 20, background: "#1e293b", borderRadius: 15 },
-  mistakeBtn: { marginTop: 10, background: "none", border: "1px solid #fbbf24", color: "#fbbf24", padding: "5px 15px", borderRadius: 20, fontSize: 12 },
-  cardWrapper: { flex: 1, display: "flex", alignItems: "center", width: "100%", maxWidth: 350 },
-  card: { width: "100%", background: "#1e293b", padding: 50, borderRadius: 30, textAlign: "center", border: "1px solid #334155", position: "relative" },
-  word: { fontSize: 40, margin: 0 },
-  tick: { position: "absolute", top: 15, right: 15, color: "#22c55e", fontSize: 40 },
-  tapHint: { fontSize: 11, color: "#38bdf8", opacity: 0.5, marginTop: 20 },
+  container: { height: "100vh", background: "#0f172a", color: "white", display: "flex", flexDirection: "column", alignItems: "center", padding: "10px 20px", fontFamily: "sans-serif", overflow: "hidden" },
+  header: { width: "100%", maxWidth: 400, display: "flex", justifyContent: "space-between", padding: "20px 0" },
+  mistakeBtn: { background: "rgba(251, 191, 36, 0.1)", border: "1px solid #fbbf24", color: "#fbbf24", padding: "8px 20px", borderRadius: 25, fontSize: 12 },
+  cardWrapper: { flex: 1, display: "flex", alignItems: "center", width: "100%", maxWidth: 380 },
+  card: { width: "100%", background: "#1e293b", padding: "40px 30px", borderRadius: 35, textAlign: "center", border: "1px solid #334155", position: "relative" },
+  word: { fontSize: 48, margin: 0, fontWeight: "800" },
+  tick: { position: "absolute", top: 15, right: 20, color: "#22c55e", fontSize: 40 },
+  tapHint: { fontSize: 12, color: "#38bdf8", opacity: 0.6, marginTop: 40 },
   details: { marginTop: 20 },
-  footer: { display: "flex", gap: 10, width: "100%", maxWidth: 350, marginBottom: 20 },
-  btn: (c) => ({ flex: 1, padding: 15, borderRadius: 12, border: `2px solid ${c}`, color: c, background: "none", fontWeight: "bold" }),
-  modal: { position: "fixed", top: 0, left: 0, width: "100%", height: "100%", background: "rgba(0,0,0,0.8)", zIndex: 100, display: "flex", justifyContent: "center", alignItems: "center" },
-  modalContent: { background: "#1e293b", padding: 20, borderRadius: 15, width: "80%", maxHeight: "60vh", overflowY: "auto" },
-  mItem: { padding: "10px 0", borderBottom: "1px solid #334155" }
+  hintText: { color: "#94a3b8", fontSize: 14, fontStyle: "italic" },
+  sentenceBox: { marginTop: 20, padding: 15, background: "rgba(15, 23, 42, 0.5)", borderRadius: 15, textAlign: "left" },
+  sentenceEn: { color: "#f8fafc", fontSize: 15, margin: 0, fontWeight: "500" },
+  sentenceTr: { color: "#64748b", fontSize: 13, marginTop: 5, margin: 0 },
+  listeningTag: { color: "#fbbf24", fontSize: 12, fontWeight: "bold", marginTop: 15 },
+  footer: { display: "flex", gap: 15, width: "100%", maxWidth: 400, marginBottom: 30 },
+  btn: (c) => ({ flex: 1, padding: 20, borderRadius: 18, border: `2px solid ${c}`, color: c, background: "none", fontWeight: "bold" })
 };
 
 export default App;
