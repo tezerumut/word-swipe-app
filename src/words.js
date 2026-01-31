@@ -3,67 +3,63 @@ export const VOCABULARY_DB = {
     { 
       word: "ABANDON", 
       meaning: "Terk etmek", 
-      hint: "To leave forever.", 
-      example: "Never abandon your dreams." 
+      hint: "To leave completely.", 
+      example: "The sailors had to abandon the sinking ship immediately." 
     },
     { 
       word: "ABILITY", 
       meaning: "Yetenek", 
-      hint: "The power to do something.", 
-      example: "She has the ability to swim fast." 
-    },
-    { 
-      word: "ABLE", 
-      meaning: "Yapabilmek", 
-      hint: "To have the power to do it.", 
-      example: "He is able to speak English." 
-    },
-    { 
-      word: "ABOUT", 
-      meaning: "Hakkında", 
-      hint: "Related to something.", 
-      example: "I am thinking about you." 
-    },
-    { 
-      word: "ABOVE", 
-      meaning: "Üzerinde", 
-      hint: "Higher than something.", 
-      example: "The sun is above the clouds." 
+      hint: "Power to do something.", 
+      example: "She has a natural ability to play the piano beautifully." 
     },
     { 
       word: "ABSENT", 
       meaning: "Yok / Devamsız", 
-      hint: "Not present here.", 
-      example: "He was absent from the meeting." 
-    },
-    { 
-      word: "ACCEPT", 
-      meaning: "Kabul etmek", 
-      hint: "To say yes.", 
-      example: "Please accept my apology." 
+      hint: "Not present.", 
+      example: "John was absent from work because he was feeling sick." 
     },
     { 
       word: "ACCIDENT", 
       meaning: "Kaza", 
-      hint: "Unlucky event.", 
-      example: "It was a small car accident." 
+      hint: "Unexpected event.", 
+      example: "I saw a small traffic accident on my way to the office." 
     },
     { 
       word: "ACCENT", 
       meaning: "Aksan", 
-      hint: "Way of speaking.", 
-      example: "You have a nice accent." 
+      hint: "Speech sound.", 
+      example: "It is very easy to understand his British accent." 
     },
     { 
       word: "ACCOUNT", 
       meaning: "Hesap", 
-      hint: "Money record.", 
-      example: "I need to check my bank account." 
+      hint: "Bank record.", 
+      example: "I don't have enough money in my bank account." 
+    },
+    { 
+      word: "ADVENTURE", 
+      meaning: "Macera", 
+      hint: "Exciting trip.", 
+      example: "Traveling alone through Africa was a great adventure." 
+    },
+    { 
+      word: "ADVICE", 
+      meaning: "Tavsiye", 
+      hint: "Suggestions.", 
+      example: "My teacher gave me some good advice for the exam." 
+    },
+    { 
+      word: "AFRAID", 
+      meaning: "Korkmuş", 
+      hint: "Feeling fear.", 
+      example: "Small children are often afraid of the dark." 
+    },
+    { 
+      word: "AIRPLANE", 
+      meaning: "Uçak", 
+      hint: "Flying vehicle.", 
+      example: "The airplane will take off in ten minutes." 
     }
   ],
-  A2: [],
-  B1: [],
-  B2: [],
-  C1: [],
-  C2: []
+  A2: [], B1: [], B2: [], C1: [], C2: []
 };
