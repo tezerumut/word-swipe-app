@@ -1,31 +1,66 @@
 export const VOCABULARY_DB = {
   A1: [
-    { word: "ACCENT", meaning: "Aksan", hint: "Way of speaking.", example: "He has a British accent." },
-    { word: "APPLE", meaning: "Elma", hint: "A red or green fruit.", example: "I eat an apple every day." },
-    { word: "BOOK", meaning: "Kitap", hint: "You read it.", example: "This book is very interesting." },
-    { word: "CAT", meaning: "Kedi", hint: "A small furry pet.", example: "The cat is sleeping." },
-    { word: "DOG", meaning: "Köpek", hint: "Man's best friend.", example: "My dog loves to run." },
-    { word: "EGG", meaning: "Yumurta", hint: "Chicken product.", example: "I want an egg for breakfast." },
-    { word: "FISH", meaning: "Balık", hint: "It swims in water.", example: "There are many fish in the sea." },
-    { word: "GARDEN", meaning: "Bahçe", hint: "Place with flowers.", example: "We have a small garden." },
-    { word: "HAPPY", meaning: "Mutlu", hint: "Feeling good.", example: "I am so happy today." },
-    { word: "ICE", meaning: "Buz", hint: "Frozen water.", example: "Put some ice in my drink." },
-    { word: "JACKET", meaning: "Ceket", hint: "You wear it when cold.", example: "Wear your jacket outside." },
-    { word: "KITCHEN", meaning: "Mutfak", hint: "Where you cook.", example: "Mom is in the kitchen." },
-    { word: "LAMP", meaning: "Lamba", hint: "It gives light.", example: "Turn on the lamp, please." },
-    { word: "MONEY", meaning: "Para", hint: "You use it to buy things.", example: "I don't have much money." },
-    { word: "NIGHT", meaning: "Gece", hint: "Opposite of day.", example: "The stars shine at night." },
-    { word: "ORANGE", meaning: "Portakal", hint: "A fruit and a color.", example: "I drink orange juice." },
-    { word: "PAPER", meaning: "Kağıt", hint: "You write on it.", example: "I need a piece of paper." },
-    { word: "QUICK", meaning: "Hızlı", hint: "Very fast.", example: "Be quick, we are late!" },
-    { word: "RIVER", meaning: "Nehir", hint: "Flowing water.", example: "The river is very long." },
-    { word: "SMILE", meaning: "Gülümsemek", hint: "Happy face.", example: "Always smile at people." },
-    { word: "TABLE", meaning: "Masa", hint: "Furniture for eating.", example: "The food is on the table." },
-    { word: "UNDER", meaning: "Altında", hint: "Below something.", example: "The cat is under the chair." },
-    { word: "VILLAGE", meaning: "Köy", hint: "Smaller than a city.", example: "I live in a small village." },
-    { word: "WATER", meaning: "Su", hint: "You drink it to live.", example: "Can I have some water?" },
-    { word: "YELLOW", meaning: "Sarı", hint: "Color of the sun.", example: "She has a yellow dress." },
-    { word: "ZOO", meaning: "Hayvanat Bahçesi", hint: "Place with animals.", example: "Let's go to the zoo." }
+    { 
+      word: "ABANDON", 
+      meaning: "Terk etmek", 
+      hint: "To leave forever.", 
+      example: "Do not abandon your hopes." 
+    },
+    { 
+      word: "ACCENT", 
+      meaning: "Aksan", 
+      hint: "Way of speaking.", 
+      example: "I love your French accent." 
+    },
+    { 
+      word: "APPLE", 
+      meaning: "Elma", 
+      hint: "A red or green fruit.", 
+      example: "An apple a day keeps the doctor away." 
+    },
+    { 
+      word: "BOOK", 
+      meaning: "Kitap", 
+      hint: "You read it.", 
+      example: "I am reading a great book." 
+    },
+    { 
+      word: "CAT", 
+      meaning: "Kedi", 
+      hint: "A small furry pet.", 
+      example: "The cat is sitting on the mat." 
+    },
+    { 
+      word: "DOG", 
+      meaning: "Köpek", 
+      hint: "Man's best friend.", 
+      example: "My dog barks at strangers." 
+    },
+    { 
+      word: "EGG", 
+      meaning: "Yumurta", 
+      hint: "Chicken product.", 
+      example: "He eats two eggs every morning." 
+    },
+    { 
+      word: "FISH", 
+      meaning: "Balık", 
+      hint: "It swims in water.", 
+      example: "Goldfish are very popular pets." 
+    },
+    { 
+      word: "GARDEN", 
+      meaning: "Bahçe", 
+      hint: "Place with flowers.", 
+      example: "The kids are playing in the garden." 
+    },
+    { 
+      word: "HAPPY", 
+      meaning: "Mutlu", 
+      hint: "Feeling good.", 
+      example: "Music makes me very happy." 
+    }
+    // Daha fazla kelime ekledikçe bu formatta devam edeceğiz.
   ],
   A2: [],
   B1: [],
