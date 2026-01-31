@@ -7,58 +7,58 @@ export const VOCABULARY_DB = {
       example: "Never abandon your dreams." 
     },
     { 
+      word: "ABILITY", 
+      meaning: "Yetenek", 
+      hint: "The power to do something.", 
+      example: "She has the ability to swim fast." 
+    },
+    { 
+      word: "ABLE", 
+      meaning: "Yapabilmek", 
+      hint: "To have the power to do it.", 
+      example: "He is able to speak English." 
+    },
+    { 
+      word: "ABOUT", 
+      meaning: "Hakkında", 
+      hint: "Related to something.", 
+      example: "I am thinking about you." 
+    },
+    { 
+      word: "ABOVE", 
+      meaning: "Üzerinde", 
+      hint: "Higher than something.", 
+      example: "The sun is above the clouds." 
+    },
+    { 
+      word: "ABSENT", 
+      meaning: "Yok / Devamsız", 
+      hint: "Not present here.", 
+      example: "He was absent from the meeting." 
+    },
+    { 
+      word: "ACCEPT", 
+      meaning: "Kabul etmek", 
+      hint: "To say yes.", 
+      example: "Please accept my apology." 
+    },
+    { 
+      word: "ACCIDENT", 
+      meaning: "Kaza", 
+      hint: "Unlucky event.", 
+      example: "It was a small car accident." 
+    },
+    { 
       word: "ACCENT", 
       meaning: "Aksan", 
       hint: "Way of speaking.", 
-      example: "She has a beautiful accent." 
+      example: "You have a nice accent." 
     },
     { 
-      word: "APPLE", 
-      meaning: "Elma", 
-      hint: "A common fruit.", 
-      example: "I want to eat a red apple." 
-    },
-    { 
-      word: "ALONE", 
-      meaning: "Yalnız", 
-      hint: "Without other people.", 
-      example: "I don't like being alone at home." 
-    },
-    { 
-      word: "ANGRY", 
-      meaning: "Kızgın", 
-      hint: "Feeling mad.", 
-      example: "My father is very angry now." 
-    },
-    { 
-      word: "ANIMAL", 
-      meaning: "Hayvan", 
-      hint: "Living thing like a dog.", 
-      example: "A lion is a wild animal." 
-    },
-    { 
-      word: "ANSWER", 
-      meaning: "Cevap", 
-      hint: "Reaction to a question.", 
-      example: "Please give me an answer." 
-    },
-    { 
-      word: "ARRIVAL", 
-      meaning: "Varış", 
-      hint: "Reaching a place.", 
-      example: "The plane arrival is at 10 PM." 
-    },
-    { 
-      word: "ART", 
-      meaning: "Sanat", 
-      hint: "Painting or music.", 
-      example: "I love modern art museums." 
-    },
-    { 
-      word: "ATTACK", 
-      meaning: "Saldırı", 
-      hint: "Act of violence.", 
-      example: "The army began the attack." 
+      word: "ACCOUNT", 
+      meaning: "Hesap", 
+      hint: "Money record.", 
+      example: "I need to check my bank account." 
     }
   ],
   A2: [],
