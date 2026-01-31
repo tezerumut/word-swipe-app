@@ -8,23 +8,5 @@ export const OXFORD_DATA = [
   { eng: "Efficient", tr: "Verimli", ex: "We need an ___ system.", opts: ["efficient", "election", "element", "emergency"] },
   { eng: "Flexible", tr: "Esnek", ex: "My schedule is ___.", opts: ["flexible", "favorite", "festival", "frequent"] },
   { eng: "Guarantee", tr: "Garanti", ex: "I ___ your safety.", opts: ["guarantee", "general", "garden", "growth"] },
-  { eng: "Healthy", tr: "Sağlıklı", ex: "I want to lead a ___ life.", opts: ["healthy", "history", "happen", "heavy"] },
-  { eng: "Imagine", tr: "Hayal etmek", ex: "___ a world without war.", opts: ["imagine", "improve", "important", "include"] },
-  { eng: "Journey", tr: "Yolculuk", ex: "Have a safe ___!", opts: ["journey", "justice", "jacket", "judge"] },
-  { eng: "Knowledge", tr: "Bilgi", ex: "He has a lot of ___.", opts: ["knowledge", "kitchen", "keyboard", "king"] },
-  { eng: "Language", tr: "Dil", ex: "English is a global ___.", opts: ["language", "laugh", "lawyer", "leader"] },
-  { eng: "Message", tr: "Mesaj", ex: "I received a ___.", opts: ["message", "memory", "member", "method"] },
-  { eng: "Necessary", tr: "Gerekli", ex: "Is it ___ to wait?", opts: ["necessary", "negative", "network", "nature"] },
-  { eng: "Opposite", tr: "Zıt", ex: "Hot is the ___ of cold.", opts: ["opposite", "opinion", "opening", "order"] },
-  { eng: "Patient", tr: "Sabırlı", ex: "Please be ___.", opts: ["patient", "pattern", "partner", "payment"] },
-  { eng: "Quality", tr: "Kalite", ex: "This is high ___.", opts: ["quality", "quarter", "question", "quickly"] },
-  { eng: "Remember", tr: "Hatırlamak", ex: "I can't ___ her name.", opts: ["remember", "receive", "reduce", "remove"] },
-  { eng: "Situation", tr: "Durum", ex: "The ___ is serious.", opts: ["situation", "science", "section", "service"] },
-  { eng: "Together", tr: "Birlikte", ex: "Let's study ___.", opts: ["together", "tomorrow", "tonight", "towards"] },
-  { eng: "Upgrade", tr: "Yükseltmek", ex: "Time to ___ your phone.", opts: ["upgrade", "urgent", "useful", "usually"] },
-  { eng: "Valuable", tr: "Değerli", ex: "Time is ___.", opts: ["valuable", "various", "village", "visit"] },
-  { eng: "Wonderful", tr: "Harika", ex: "What a ___ day!", opts: ["wonderful", "weather", "wedding", "welcome"] },
-  { eng: "Yesterday", tr: "Dün", ex: "I saw her ___.", opts: ["yesterday", "yellow", "young", "yard"] },
-  { eng: "Zero", tr: "Sıfır", ex: "The score is ___.", opts: ["zero", "zone", "zoom", "zebra"] }
-  // Not: Liste buraya istediğin kadar eklenebilir.
+  { eng: "Healthy", tr: "Sağlıklı", ex: "I want to lead a ___ life.", opts: ["healthy", "history", "happen", "heavy"] }
 ];
