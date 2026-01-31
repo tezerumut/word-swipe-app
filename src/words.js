@@ -20,6 +20,42 @@ export const VOCABULARY_DB = {
     { word: "ACROSS", meaning: "Karşıdan karşıya", hint: "From one side to the other of something.", example: "She walked across the field." },
     { word: "ACT", meaning: "Hareket etmek / Rol yapmak", hint: "To behave in a particular way or perform in a play.", example: "Stop acting like a child!" },
     { word: "ACTION", meaning: "Eylem", hint: "The process of doing something.", example: "We must take action before it's too late." },
+    export const VOCABULARY_DB = {
+  A1: [
+    // ... Önceki verdiklerim (Abandon'dan Action'a kadar)
+    { word: "ACTIVE", meaning: "Aktif / Hareketli", hint: "Busy with a particular activity.", example: "She's very active in local politics." },
+    { word: "ACTOR", meaning: "Oyuncu", hint: "A person who performs in a play or movie.", example: "He is a famous Hollywood actor." },
+    { word: "ADD", meaning: "Eklemek", hint: "To put something with something else.", example: "Add some sugar to the tea." },
+    { word: "ADDRESS", meaning: "Adres", hint: "The details of where a building is.", example: "What is your home address?" },
+    { word: "ADULT", meaning: "Yetişkin", hint: "A person who is fully grown.", example: "Adults pay full price, children go free." },
+    { word: "ADVICE", meaning: "Tavsiye", hint: "An opinion about what someone should do.", example: "Can you give me some advice?" },
+    { word: "AFRAID", meaning: "Korkmuş", hint: "Feeling fear or worry.", example: "Are you afraid of spiders?" },
+    { word: "AFTER", meaning: "Sonra", hint: "Later than something.", example: "I'll see you after lunch." },
+    { word: "AFTERNOON", meaning: "Öğleden sonra", hint: "The period between lunch and evening.", example: "What are you doing this afternoon?" },
+    { word: "AGAIN", meaning: "Tekrar", hint: "One more time.", example: "Can you say that again, please?" },
+    { word: "AGE", meaning: "Yaş", hint: "How many years someone has lived.", example: "He left school at the age of 18." },
+    { word: "AGO", meaning: "Önce", hint: "In the past.", example: "I met her two years ago." },
+    { word: "AGREE", meaning: "Aynı fikirde olmak", hint: "To have the same opinion.", example: "I agree with you completely." },
+    { word: "AIR", meaning: "Hava", hint: "The mixture of gases around the Earth.", example: "I need some fresh air." },
+    { word: "AIRPORT", meaning: "Havalimanı", hint: "A place where aircraft land and take off.", example: "We arrived at the airport early." },
+    { word: "ALL", meaning: "Hepsi", hint: "Every one of.", example: "All my friends are here." },
+    { word: "ALSO", meaning: "Ayrıca / Da", hint: "In addition.", example: "She is a singer and also an actress." },
+    { word: "ALWAYS", meaning: "Her zaman", hint: "At all times.", example: "I always drink coffee in the morning." },
+    { word: "AMAZING", meaning: "Şaşırtıcı / Harika", hint: "Extremely surprising or good.", example: "The view from the top is amazing." },
+    { word: "ANGRY", meaning: "Kızgın", hint: "Having a strong feeling of dislike.", example: "My boss was very angry with me." },
+    { word: "ANIMAL", meaning: "Hayvan", hint: "A living creature that is not a plant.", example: "A dog is a loyal animal." },
+    { word: "ANOTHER", meaning: "Başka bir", hint: "One more or a different one.", example: "Would you like another cup of tea?" },
+    { word: "ANSWER", meaning: "Cevap", hint: "The reaction to a question.", example: "Please answer the question." },
+    { word: "ANY", meaning: "Hiç / Herhangi", hint: "Some, or every.", example: "Do you have any questions?" },
+    { word: "ANYONE", meaning: "Kimse / Herhangi biri", hint: "Any person.", example: "Does anyone want some cake?" },
+    { word: "ANYTHING", meaning: "Hiçbir şey / Herhangi bir şey", hint: "Any object or event.", example: "Is there anything in the box?" },
+    { word: "APPLE", meaning: "Elma", hint: "A hard, round fruit with red or green skin.", example: "I eat an apple every day." },
+    { word: "AREA", meaning: "Alan / Bölge", hint: "A particular part of a place.", example: "This is a quiet residential area." },
+    { word: "ARM", meaning: "Kol", hint: "The long part of the body between shoulder and hand.", example: "He broke his arm while playing football." },
+    { word: "AROUND", meaning: "Etrafında / Yaklaşık", hint: "In a circle or near to.", example: "We walked around the city center." }
+  ],
+  A2: [], B1: [], B2: [], C1: [], C2: []
+};
     // ... Liste bu şekilde 500'e kadar devam edecek
   ],
   A2: [], B1: [], B2: [], C1: [], C2: []
