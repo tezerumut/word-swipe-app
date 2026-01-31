@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { VOCABULARY_DB } from "./words";
 
@@ -7,7 +7,7 @@ const App = () => {
   const [levelIndex, setLevelIndex] = useState(0);
   const [wordIndex, setWordIndex] = useState(0);
   const [score, setScore] = useState(0);
-  const [mistakes, setMistakes] = useState([]); // Yanlış yapılan kelimeler listesi
+  const [mistakes, setMistakes] = useState([]); // Yanlışları takip eder
   const [isListening, setIsListening] = useState(false);
   const [isCorrectSpeech, setIsCorrectSpeech] = useState(false);
   const [canHear, setCanHear] = useState(true);
@@ -49,10 +49,10 @@ const App = () => {
 
   const handleManualAction = (known) => {
     if (known) {
-      setScore(score + 10);
+      setScore(prev => prev + 10);
     } else {
-      // Bilmiyorsam hata listesine ekle
-      setMistakes(prev => [...prev, currentData.word]);
+      // Bilmiyorsa kelimeyi mistake listesine ekle
+      setMistakes(prev => [...new Set([...prev, currentData.word])]);
     }
     
     setDirection(known ? 1000 : -1000);
@@ -63,18 +63,21 @@ const App = () => {
       setIsCorrectSpeech(false);
       
       if (wordIndex + 1 < levelWords.length) {
-        setWordIndex(wordIndex + 1);
-      } else if (levelIndex + 1 < levels.length) {
-        // SEVİYE GEÇİŞİ
-        alert(`Tebrikler! ${currentLevel} bitti. Yanlış sayısı: ${mistakes.length}. Şimdi ${levels[levelIndex + 1]} başlıyor!`);
-        setLevelIndex(levelIndex + 1);
-        setWordIndex(0);
-        setMistakes([]); // Yeni seviye için temizle
+        setWordIndex(prev => prev + 1);
+      } else {
+        // SEVİYE SONU RAPORU VE GEÇİŞ
+        alert(`Tebrikler! ${currentLevel} bitti.\nSkor: ${score + (known ? 10 : 0)}\nYanlış Sayısı: ${mistakes.length + (known ? 0 : 1)}`);
+        
+        if (levelIndex + 1 < levels.length) {
+          setLevelIndex(prev => prev + 1);
+          setWordIndex(0);
+          setMistakes([]); 
+        }
       }
     }, 300);
   };
 
-  if (!currentData) return <div style={s.container}>Yükleniyor...</div>;
+  if (!currentData) return <div style={s.container}>Tebrikler! Tüm seviyeler tamamlandı.</div>;
 
   return (
     <div style={s.container}>
@@ -86,7 +89,7 @@ const App = () => {
         </div>
       </div>
 
-      <div style={s.remaining}>KALAN: {remaining} | YANLIŞLARIM: {mistakes.length}</div>
+      <div style={s.metaInfo}>KALAN: {remaining} | YANLIŞLARIM: {mistakes.length}</div>
 
       <div style={s.cardWrapper}>
         <AnimatePresence mode="wait">
@@ -134,19 +137,19 @@ const App = () => {
 
 const s = {
   container: { height: "100vh", backgroundColor: "#0f172a", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", fontFamily: "Inter, sans-serif", color: "#f8fafc", overflow: "hidden", padding: "10px 15px" },
-  header: { width: "100%", padding: "10px 15px", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#1e293b", borderRadius: "12px", marginTop: "5px" },
-  stats: { fontSize: "13px", fontWeight: "bold", color: "#38bdf8" },
-  remaining: { fontSize: "11px", color: "#94a3b8", marginTop: "5px" },
-  toggleGroup: { display: "flex", gap: "5px" },
-  toggle: (active) => ({ width: "35px", height: "35px", borderRadius: "8px", border: "none", background: active ? "#334155" : "#7f1d1d", color: "white" }),
-  cardWrapper: { width: "100%", maxWidth: "360px", height: "55vh", position: "relative", display: "flex", alignItems: "center" },
-  card: { width: "100%", minHeight: "320px", background: "#1e293b", borderRadius: "20px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "20px", border: "1px solid #334155", textAlign: "center", boxShadow: "0 15px 30px rgba(0,0,0,0.4)", position: "relative" },
+  header: { width: "100%", padding: "8px 15px", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#1e293b", borderRadius: "10px", marginTop: "5px" },
+  stats: { fontSize: "12px", fontWeight: "bold", color: "#38bdf8" },
+  metaInfo: { fontSize: "10px", color: "#94a3b8", marginTop: "5px" },
+  toggleGroup: { display: "flex", gap: "8px" },
+  toggle: (active) => ({ width: "32px", height: "32px", borderRadius: "8px", border: "none", background: active ? "#334155" : "#7f1d1d", color: "white", cursor: "pointer" }),
+  cardWrapper: { width: "100%", maxWidth: "340px", height: "55vh", position: "relative", display: "flex", alignItems: "center" },
+  card: { width: "100%", minHeight: "300px", background: "#1e293b", borderRadius: "20px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "20px", border: "1px solid #334155", textAlign: "center", boxShadow: "0 15px 30px rgba(0,0,0,0.4)", position: "relative" },
   successBadge: { position: "absolute", color: "#22c55e", fontSize: "70px", zIndex: 10, pointerEvents: "none", top: "15%" },
   word: { fontSize: "clamp(26px, 6vw, 36px)", letterSpacing: "2px", margin: "5px 0" },
   tapHint: { fontSize: "10px", color: "#38bdf8", opacity: 0.6, marginTop: "10px" },
   details: { width: "100%", marginTop: "5px" },
   meaning: { color: "#22c55e", fontWeight: "bold", fontSize: "15px", marginBottom: "5px" },
-  definition: { color: "#94a3b8", fontSize: "12px", marginBottom: "8px" },
+  definition: { color: "#94a3b8", fontSize: "12px", marginBottom: "8px", lineHeight: "1.3" },
   exampleBox: { background: "#0f172a", padding: "8px", borderRadius: "8px", fontSize: "11px", borderLeft: "3px solid #38bdf8", color: "#cbd5e1", textAlign: "left" },
   listening: { marginTop: "5px", color: "#fbbf24", fontWeight: "bold", fontSize: "10px" },
   footer: { display: "flex", gap: "10px", marginBottom: "20px", width: "100%", maxWidth: "360px" },
