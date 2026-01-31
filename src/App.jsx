@@ -1,86 +1,70 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { OXFORD_DATA } from "./words";
+import { VOCABULARY_DB } from "./words";
 
-export default function WordMasterApp() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [score, setScore] = useState(0);
-  const [direction, setDirection] = useState(null);
+export default function App() {
+  const [level, setLevel] = useState("A1");
+  const [index, setIndex] = useState(0);
+  const [canHear, setCanHear] = useState(true);
+  const [canSpeak, setCanSpeak] = useState(true);
+  const [showMeaning, setShowMeaning] = useState(false);
 
-  const currentData = OXFORD_DATA[currentIndex];
+  const currentWord = VOCABULARY_DB[level][index];
 
-  const handleSwipe = (isCorrect) => {
-    if (isCorrect) setScore(score + 10);
-    setDirection(isCorrect ? 1000 : -1000); // Sağa (+1000) veya Sola (-1000) fırlatma
-    
-    setTimeout(() => {
-      setDirection(null);
-      setCurrentIndex((prev) => (prev + 1) % OXFORD_DATA.length);
-    }, 300);
+  // Kelime Telaffuzu
+  const playAudio = () => {
+    if (canHear) {
+      const audio = new Audio(currentWord.audio);
+      audio.play();
+    }
+  };
+
+  const handleSwipe = (known) => {
+    setShowMeaning(false);
+    if (index + 1 < VOCABULARY_DB[level].length) {
+      setIndex(index + 1);
+    } else {
+      alert(`${level} seviyesi bitti! Bir üst seviyeye hazırsın.`);
+      // Seviye atlama mantığı buraya eklenecek
+    }
   };
 
   return (
-    <div style={{ 
-      height: "100vh", backgroundColor: "#0f172a", display: "flex", 
-      flexDirection: "column", alignItems: "center", justifyContent: "center",
-      fontFamily: "'Inter', sans-serif", overflow: "hidden", color: "#f8fafc"
-    }}>
+    <div style={{ height: "100vh", backgroundColor: "#0f172a", color: "#f8fafc", fontFamily: "Inter", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
       
-      {/* Üst Panel: Puan ve İlerleme */}
-      <div style={{ position: "absolute", top: "40px", textAlign: "center" }}>
-        <div style={{ fontSize: "28px", fontWeight: "800", color: "#38bdf8" }}>SCORE: {score}</div>
-        <div style={{ fontSize: "12px", color: "#94a3b8", marginTop: "8px", letterSpacing: "2px" }}>
-          LEVEL 1 • WORD {currentIndex + 1} / {OXFORD_DATA.length}
-        </div>
+      {/* Üst Durum Çubuğu */}
+      <div style={{ position: "absolute", top: "20px", display: "flex", gap: "10px" }}>
+        <button onClick={() => setCanHear(!canHear)} style={utilBtn}>{canHear ? "🔊 Duyabiliyorum" : "🔇 Duyamıyorum"}</button>
+        <button onClick={() => setCanSpeak(!canSpeak)} style={utilBtn}>{canSpeak ? "🎤 Konuşabiliyorum" : "🙊 Konuşamıyorum"}</button>
       </div>
 
-      {/* Swipe Kart Alanı */}
-      <div style={{ position: "relative", width: "350px", height: "450px" }}>
-        <AnimatePresence mode='wait'>
-          <motion.div
-            key={currentIndex}
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1, x: 0 }}
-            exit={{ x: direction, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 260, damping: 20 }}
-            style={{
-              position: "absolute", width: "100%", height: "100%",
-              backgroundColor: "#1e293b", borderRadius: "24px",
-              border: "1px solid #334155", display: "flex", flexDirection: "column",
-              alignItems: "center", justifyContent: "center", padding: "40px",
-              boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5)"
-            }}
-          >
-            <div style={{ color: "#38bdf8", fontSize: "14px", fontWeight: "700", marginBottom: "15px" }}>DEFINITION</div>
-            <p style={{ fontSize: "19px", textAlign: "center", lineHeight: "1.6", color: "#e2e8f0", marginBottom: "40px" }}>
-              "{currentData.hint}"
-            </p>
-            
-            <div style={{ 
-              fontSize: "34px", letterSpacing: "10px", fontWeight: "900", 
-              color: "#f8fafc", borderBottom: "3px solid #38bdf8", paddingBottom: "10px" 
-            }}>
-              {currentData.word.split('').map(() => "_").join(' ')}
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
+      <div style={{ marginBottom: "20px", color: "#38bdf8", fontWeight: "bold" }}>Level: {level} | Progress: {index + 1}/{VOCABULARY_DB[level].length}</div>
 
-      {/* Kontrol Butonları */}
-      <div style={{ display: "flex", gap: "30px", marginTop: "60px" }}>
-        <button onClick={() => handleSwipe(false)} style={btnStyle("#ef4444")}>✕</button>
-        <button onClick={() => handleSwipe(true)} style={btnStyle("#22c55e")}>✓</button>
-      </div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentWord.word}
+          onClick={() => { setShowMeaning(true); playAudio(); }}
+          style={cardStyle}
+          whileTap={{ scale: 0.95 }}
+        >
+          <h1 style={{ fontSize: "40px", letterSpacing: "5px" }}>{currentWord.word}</h1>
+          {showMeaning && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ marginTop: "20px", textAlign: "center" }}>
+              <p style={{ color: "#94a3b8" }}>{currentWord.hint}</p>
+              {canSpeak && <p style={{ color: "#22c55e", marginTop: "10px" }}>Şimdi tekrarla...</p>}
+            </motion.div>
+          )}
+        </motion.div>
+      </AnimatePresence>
 
-      <p style={{ marginTop: "20px", color: "#475569", fontSize: "12px" }}>
-        Swipe Right to confirm (✓) | Swipe Left to skip (✕)
-      </p>
+      <div style={{ display: "flex", gap: "40px", marginTop: "40px" }}>
+        <button onClick={() => handleSwipe(false)} style={actionBtn("#ef4444")}>BİLMİYORUM (SOL)</button>
+        <button onClick={() => handleSwipe(true)} style={actionBtn("#22c55e")}>BİLİYORUM (SAĞ)</button>
+      </div>
     </div>
   );
 }
 
-const btnStyle = (color) => ({
-  width: "75px", height: "75px", borderRadius: "50%", border: `2px solid ${color}`,
-  backgroundColor: "transparent", color: color, fontSize: "28px", cursor: "pointer",
-  display: "flex", alignItems: "center", justifyContent: "center", transition: "0.2s"
-});
+const cardStyle = { width: "350px", height: "450px", backgroundColor: "#1e293b", borderRadius: "24px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", cursor: "pointer", border: "1px solid #334155", padding: "20px" };
+const utilBtn = { padding: "8px 15px", borderRadius: "8px", border: "1px solid #334155", backgroundColor: "#1e293b", color: "#94a3b8", cursor: "pointer" };
+const actionBtn = (clr) => ({ padding: "15px 30px", borderRadius: "12px", border: `2px solid ${clr}`, backgroundColor: "transparent", color: clr, fontWeight: "bold", cursor: "pointer" });
